@@ -1,5 +1,6 @@
 # version code d345910f07ae
-import from dictutil import dict2list, list2dict
+from dictutil import dict2list, list2dict
+from random import randint
 
 coursera = 1
 # Please fill out this stencil and submit using the provided submission script.
@@ -15,7 +16,8 @@ def movie_review(name):
     Input: the name of a movie
     Output: a string (one of the review options), selected at random using randint
     """
-    return ...
+    blab = ["Smell it!", "Better than bacon!", "Existential crisis-inducer", "Tastes like chicken!", "Better than a stick in the eye!", "I wept!", "Soylent Green is made from people!!"]
+    return blab[randint(0,len(blab)-1)]
 
 
 
@@ -34,9 +36,16 @@ def makeInverseIndex(strlist):
     >>> makeInverseIndex(['hello world','hello','hello cat','hellolot of cats']) == {'hello': {0, 1, 2}, 'cat': {2}, 'of': {3}, 'world': {0}, 'cats': {3}, 'hellolot': {3}}
     True
     """
-    pass
+    d = {}
+    for x,y in enumerate(strlist):
+       for w in y.split():
+           if w in d:
+             d[w] |= {x} # merge token counter
+           else:
+             d[w] = {x}  # Add it to set
+    return d
 
-
+# print( makeInverseIndex(['hello world','hello','hello cat','hellolot of cats'])) 
 
 ## 3: (Task 3) Or Search
 def orSearch(inverseIndex, query):
@@ -51,9 +60,16 @@ def orSearch(inverseIndex, query):
     >>> orSearch(idx, ['Johann', 'Carl'])
     {0, 2, 3, 4, 5}
     """
-    pass
+    d = set()
+    for w in query:
+      if w in inverseIndex:
+         d |= inverseIndex[w]
+    return d
 
-
+# idx = makeInverseIndex(['Johann Sebastian Bach', 'Johannes Brahms', 'Johann Strauss the Younger', 'Johann Strauss the Elder', ' Johann Christian Bach',  'Carl Philipp Emanuel Bach'])
+# print(idx)
+# print(orSearch(idx, ['Bach','the']))
+# print(orSearch(idx, ['Johann','Carl']))
 
 ## 4: (Task 4) And Search
 def andSearch(inverseIndex, query):
@@ -68,5 +84,15 @@ def andSearch(inverseIndex, query):
     >>> andSearch(idx, ['Johann', 'Bach'])
     {0, 4}
     """
-    pass
+    d = set()
+    for w in query:
+      if w in inverseIndex:
+         if not(d):
+            d |= inverseIndex[w]
+         else:
+            d &= inverseIndex[w]
+    return d
 
+# idx = makeInverseIndex(['Johann Sebastian Bach', 'Johannes Brahms', 'Johann Strauss the Younger', 'Johann Strauss the Elder', ' Johann Christian Bach',  'Carl Philipp Emanuel Bach'])
+# print(andSearch(idx, ['Johann', 'the']))
+# print(andSearch(idx, ['Johann', 'Bach']))
