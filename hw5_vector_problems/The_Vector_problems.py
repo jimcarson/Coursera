@@ -62,5 +62,5 @@ v3 =    [4,   1,  -1,  -1]
 uv_a = sum([u*v for u,v in zip([1,0]               ,[5,4321]           )])
 uv_b = sum([u*v for u,v in zip([0,1]               ,[12345,6]          )])
 uv_c = sum([u*v for u,v in zip([-1,3]              ,[5,7]              )])
-uv_d = sum([u*v for u,v in zip([-1/2**0.5,1/2**0.5],[1/2**0.5,1/2**0.5])])
+uv_d = sum([u*v for u,v in zip([-1/(2**0.5),1/(2**0.5)],[1/(2**0.5),-1/(2**0.5)])])
 
