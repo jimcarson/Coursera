@@ -5,7 +5,32 @@ coursera = 1
 # Be sure that the file voting_record_dump109.txt is in the matrix/ directory.
 
 
+import re
+MAX = float('inf')
 
+#
+# Find a list of a particular party, uses a regular expression so 
+# we can wildcard.
+#
+def find_members_of_party(strlist,party):
+    members = {}
+    for i in strlist:
+        t = i.split()
+        if re.match(party,t[1],re.I):
+          members[t[0]] = t[1] 
+    return members
+
+#
+# Find a list of a particular party, uses a regular expression so 
+# we can wildcard.
+#
+def find_senators_in_state(strlist,state):
+    members = {}
+    for i in strlist:
+        t = i.split()
+        if re.match(state,t[2],re.I):
+          members[t[0]] = t[2] 
+    return members
 
 
 ## 1: (Task 2.12.1) Create Voting Dict
@@ -39,8 +64,16 @@ def create_voting_dict(strlist):
     The lists for each senator should preserve the order listed in voting data.
     In case you're feeling clever, this can be done in one line.
     """
-    pass
+    vr = {}
+    for i in strlist:
+        t = i.split()
+        vr[t[0]] = [int(j) for j in t[3:]]
+    return vr
 
+mylist = list(open('voting_record_dump109.txt'))
+t = create_voting_dict(mylist)
+#print(t['Snowe'])
+#print(t['Sarbanes'])
 
 
 ## 2: (Task 2.12.2) Policy Compare
@@ -61,8 +94,19 @@ def policy_compare(sen_a, sen_b, voting_dict):
         
     You should definitely try to write this in one line.
     """
-    pass
+    return sum([voting_dict[sen_a][i]*voting_dict[sen_b][i] for i in range(len(voting_dict[sen_a]))])
 
+
+# OPTIONAL:
+# Compare the two senators from Washington, Patty Murry and Maria Cantwell.  They 
+# are pretty similar
+#
+# wa = list(find_senators_in_state(mylist, 'WA').keys())
+# print(policy_compare(wa[0], wa[1], t)) # there are two senators for each state
+
+#print(policy_compare('Snowe','Sarbanes',t))
+#voting_dict = {'Fox-Epstein':[-1,-1,-1,1],'Ravella':[1,1,1,1]}
+#print(policy_compare('Fox-Epstein','Ravella', voting_dict))
 
 
 ## 3: (Task 2.12.3) Most Similar
@@ -80,10 +124,19 @@ def most_similar(sen, voting_dict):
 
     Note that you can (and are encouraged to) re-use you policy_compare procedure.
     """
-    
-    return ""
+    who = ""
+    c = -MAX
+    for i in voting_dict.keys():
+        # if i == sen: continue 
+        t = policy_compare(sen,i,voting_dict)
+        if t > c:
+           who = i
+           c = t
+    return who
 
 
+# vd = {'Klein': [1,1,1], 'Fox-Epstein': [1,-1,0], 'Ravella': [-1,0,0]}
+# print(most_similar('Klein', vd))
 
 ## 4: (Task 2.12.4) Least Similar
 def least_similar(sen, voting_dict):
@@ -97,15 +150,23 @@ def least_similar(sen, voting_dict):
         >>> least_similar('a', vd)
         'c'
     """
-    pass
+    who = ""
+    c = MAX
+    for i in voting_dict.keys():
+        if i == sen: continue 
+        t = policy_compare(sen,i,voting_dict)
+        if t < c:
+           who = i
+           c = t
+    return who
 
+# vd = {'Klein': [1,1,1], 'Fox-Epstein': [1,-1,0], 'Ravella': [-1,0,0]}
+# print(most_similar('Klein', vd))
 
 
 ## 5: (Task 2.12.5) Chafee, Santorum
-most_like_chafee    = ''
-least_like_santorum = '' 
-
-
+most_like_chafee    = most_similar('Chafee', create_voting_dict(mylist))
+least_like_santorum = least_similar('Santorum', create_voting_dict(mylist))
 
 ## 6: (Task 2.12.7) Most Average Democrat
 def find_average_similarity(sen, sen_set, voting_dict):
@@ -117,9 +178,7 @@ def find_average_similarity(sen, sen_set, voting_dict):
         >>> find_average_similarity('Klein', {'Fox-Epstein','Ravella'}, vd)
         -0.5
     """
-    return ...
-
-most_average_Democrat = ... # give the last name (or code that computes the last name)
+    return sum([policy_compare(sen,i,voting_dict) for i in sen_set])/len(sen_set)
 
 
 
@@ -141,11 +200,35 @@ def find_average_record(sen_set, voting_dict):
         >>> find_average_record({'a'}, d)
         [0.0, 1.0, 1.0]
     """
-    return ...
+    return [sum([voting_dict[sen][i] for sen in sen_set])/len(sen_set) for i in range(len(list(voting_dict.values())[0]))]
 
-average_Democrat_record = ... # give the vector as a list
+#
+# Exercise #6 should really be swapped with #7.
+#
+
+#
+# Generate a list of democrats
+#
+democrats = find_members_of_party(mylist,'D')
+democrat_voting = {name:t[name] for name in democrats}
+
+#
+# find the overall average record.
+#
+average_Democrat_record = find_average_record(democrats, create_voting_dict(mylist))
+# 
+# Create the prototype "Average" Democrat
+#
+democrat_voting['Average'] = average_Democrat_record
+#
+# Find who they're most similar to
+#
+most_average_Democrat = most_similar ('Average', democrat_voting) 
+least_average_Democrat = least_similar ('Average', democrat_voting) 
 
 
+print(most_average_Democrat)
+print(least_average_Democrat)
 
 ## 8: (Task 2.12.9) Bitter Rivals
 def bitter_rivals(voting_dict):
@@ -160,5 +243,22 @@ def bitter_rivals(voting_dict):
         >>> br == ('Fox-Epstein', 'Ravella') or br == ('Ravella', 'Fox-Epstein')
         True
     """
-    return (..., ...)
+    who = ()
+    rivals = {}
+    compare = MAX
+    #
+    # For each senator, find the least similar.
+    #
+    for i in voting_dict.keys():
+        rivals[i] = least_similar(i, voting_dict)
+    #
+    # Now find who are the most extreme.
+    #
+    for i in rivals:
+        t = policy_compare(i, rivals[i], voting_dict)
+        if t < compare:
+            compare = t
+            who = (i, rivals[i])
+    return who
 
+# print(bitter_rivals ({'Klein': [-1,0,1], 'Fox-Epstein': [-1,-1,-1], 'Ravella': [0,0,1]}))
