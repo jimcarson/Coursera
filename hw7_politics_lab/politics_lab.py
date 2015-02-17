@@ -10,27 +10,18 @@ MAX = float('inf')
 
 #
 # Find a list of a particular party, uses a regular expression so 
-# we can wildcard.
+# we can wildcard.  Replaced my longer procedure with comprehension that 
+# Scott Weitzenhoffer suggested on the forums
 #
 def find_members_of_party(strlist,party):
-    members = {}
-    for i in strlist:
-        t = i.split()
-        if re.match(party,t[1],re.I):
-          members[t[0]] = t[1] 
-    return members
+   return {sen.split()[0] for sen in mylist if sen.split()[1] == party}
 
 #
 # Find a list of a particular party, uses a regular expression so 
 # we can wildcard.
 #
 def find_senators_in_state(strlist,state):
-    members = {}
-    for i in strlist:
-        t = i.split()
-        if re.match(state,t[2],re.I):
-          members[t[0]] = t[2] 
-    return members
+    return {sen.split()[0] for sen in mylist if sen.split()[2] == state}
 
 
 ## 1: (Task 2.12.1) Create Voting Dict
@@ -127,7 +118,7 @@ def most_similar(sen, voting_dict):
     who = ""
     c = -MAX
     for i in voting_dict.keys():
-        # if i == sen: continue 
+        if i == sen: continue 
         t = policy_compare(sen,i,voting_dict)
         if t > c:
            who = i
@@ -180,7 +171,10 @@ def find_average_similarity(sen, sen_set, voting_dict):
     """
     return sum([policy_compare(sen,i,voting_dict) for i in sen_set])/len(sen_set)
 
+# vd = {'Klein': [1,1,1], 'Fox-Epstein': [1,-1,0], 'Ravella': [-1,0,0]}
+# print(find_average_similarity('Klein', {'Fox-Epstein','Ravella'}, vd))
 
+# most_average_Democrat="Biden"
 
 ## 7: (Task 2.12.8) Average Record
 def find_average_record(sen_set, voting_dict):
@@ -203,7 +197,7 @@ def find_average_record(sen_set, voting_dict):
     return [sum([voting_dict[sen][i] for sen in sen_set])/len(sen_set) for i in range(len(list(voting_dict.values())[0]))]
 
 #
-# Exercise #6 should really be swapped with #7.
+# Exercise six should really be swapped with seven.
 #
 
 #
@@ -227,8 +221,8 @@ most_average_Democrat = most_similar ('Average', democrat_voting)
 least_average_Democrat = least_similar ('Average', democrat_voting) 
 
 
-print(most_average_Democrat)
-print(least_average_Democrat)
+#print(most_average_Democrat)
+#print(least_average_Democrat)
 
 ## 8: (Task 2.12.9) Bitter Rivals
 def bitter_rivals(voting_dict):
