@@ -15,9 +15,7 @@ def getitem(v,k):
     >>> v['b']
     0
     """
-    if k in v.f:
-       return v.f[k]
-    return 0
+    return v.f[k] if k in v.f else 0
 
 def setitem(v,k,val):
     """
