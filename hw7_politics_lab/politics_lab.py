@@ -206,14 +206,10 @@ def find_average_record(sen_set, voting_dict):
 democrats = find_members_of_party(mylist,'D')
 democrat_voting = {name:t[name] for name in democrats}
 
-#
-# find the overall average record.
-#
-average_Democrat_record = find_average_record(democrats, create_voting_dict(mylist))
 # 
 # Create the prototype "Average" Democrat
 #
-democrat_voting['Average'] = average_Democrat_record
+democrat_voting['Average'] = find_average_record(democrats, create_voting_dict(mylist))
 #
 # Find who they're most similar to
 #
