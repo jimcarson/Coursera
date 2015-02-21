@@ -8,21 +8,21 @@ def getitem(v,k):
     """
     Return the value of entry k in v.
     Be sure getitem(v,k) returns 0 if k is not represented in v.f.
-
     >>> v = Vec({'a','b','c', 'd'},{'a':2,'c':1,'d':3})
     >>> v['d']
     3
     >>> v['b']
     0
     """
-    return v.f[k] if k in v.f else 0
+    if k in v.f:
+       return v.f[k]
+    return 0
 
 def setitem(v,k,val):
     """
     Set the element of v with label d to be val.
     setitem(v,d,val) should set the value for key d even if d
     is not previously represented in v.f.
-
     >>> v = Vec({'a', 'b', 'c'}, {'b':0})
     >>> v['b'] = 5
     >>> v['b']
@@ -46,19 +46,21 @@ def equal(u,v):
 
     >>> Vec({'x','y','z'},{'y':1,'x':2}) == Vec({'x','y','z'},{'y':1,'z':0})
     False
+
     >>> Vec({'a','b','c'}, {'a':0,'c':1}) == Vec({'a','b','c'}, {'a':0,'c':1,'b':4})
     False
     >>> Vec({'a','b','c'}, {'a':0,'c':1,'b':4}) == Vec({'a','b','c'}, {'a':0,'c':1})
     False
 
     The keys matter:
+
     >>> Vec({'a','b'},{'a':1}) == Vec({'a','b'},{'b':1})
     False
 
     The values matter:
+
     >>> Vec({'a','b'},{'a':1}) == Vec({'a','b'},{'a':2})
     False
-
     """
     assert u.D == v.D
     return {i:u.f[i] for i in u.f if u.f[i] != 0} == {i:v.f[i] for i in v.f if v.f[i] != 0}
@@ -68,7 +70,6 @@ def add(u,v):
     Returns the sum of the two vectors.
     Make sure to add together values for all keys from u.f and v.f even if some keys in u.f do not
     exist in v.f (or vice versa)
-
     >>> a = Vec({'a','e','i','o','u'}, {'a':0,'e':1,'i':2})
     >>> b = Vec({'a','e','i','o','u'}, {'o':4,'u':7})
     >>> c = Vec({'a','e','i','o','u'}, {'a':0,'e':1,'i':2,'o':4,'u':7})
@@ -88,22 +89,21 @@ def add(u,v):
     """
     assert u.D == v.D
     t = {}
-    for i in u.f.keys():
-        if i not in v.f.keys():
-            t[i] = u.f[i]
-
     for i in v.f.keys():
         if i in u.f.keys():
             t[i] = v.f[i] + u.f[i]
         else:
             t[i] = v.f[i]
 
+    for i in u.f.keys():
+        if i not in v.f.keys():
+            t[i] = u.f[i]
+
     return Vec(u.D, t.copy())
 
 def dot(u,v):
     """
     Returns the dot product of the two vectors.
-
     >>> u1 = Vec({'a','b'}, {'a':1, 'b':2})
     >>> u2 = Vec({'a','b'}, {'b':2, 'a':1})
     >>> u1*u2
@@ -123,18 +123,19 @@ def dot(u,v):
 
     The pairwise products should not be collected in a set before summing
     because a set eliminates duplicates
+
     >>> v1 = Vec({1, 2}, {1 : 3, 2 : 6})
     >>> v2 = Vec({1, 2}, {1 : 2, 2 : 1})
     >>> v1 * v2
     12
     """
     assert u.D == v.D
-    return sum([getitem(u,i)*getitem(v,i) for i in u.D])
+    # return sum([getitem(u,i)*getitem(v,i) for i in u.D])
+    return sum([getitem(v,i)*getitem(u,i) for i in u.D])
 
 def scalar_mul(v, alpha):
     """
     Returns the scalar-vector product alpha times v.
-
     >>> zero = Vec({'x','y','z','w'}, {})
     >>> u = Vec({'x','y','z','w'},{'x':1,'y':2,'z':3,'w':4})
     >>> 0*u == zero
@@ -154,7 +155,6 @@ def scalar_mul(v, alpha):
 def neg(v):
     """
     Returns the negation of a vector.
-
     >>> u = Vec({2,4,6,8},{2:1,4:2,6:3,8:4})
     >>> -u
     Vec({8, 2, 4, 6},{8: -4, 2: -1, 4: -2, 6: -3})
@@ -162,7 +162,6 @@ def neg(v):
     True
     >>> (-Vec({'a','b','c'}, {'a':1})).D == {'a','b','c'}
     True
-
     """
     return scalar_mul(v,-1)
 
