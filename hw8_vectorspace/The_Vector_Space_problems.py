@@ -90,17 +90,14 @@ def GF2_span(D, S):
         you need to reset the sum_set
     and now you have a result set to return
 '''
-    #if len(S) == 0: 
-    #    return Vec(D,{})
-    # r = set()
-    # for i in product({0,one}, repeat=len(S)):
-    #     r.append(sum([u*v for (u,v) in zip(i,S)]))
-    # return r
-    #return [sum([a*v for (a,v) in zip(i,S)]) for i in product({0,one},repeat=len(S))] if len(S) !=0 else Vec(D,{})
-    # probably spent eight hours trying to grok this;  simple solution hantempo
-    if len(S) == 0:
+    if len(S) == 0: 
         return {Vec(D,{})}
     r = set()
+    # for i in product({0,one}, repeat=len(S)):
+    #      r.update(sum([u*v for (u,v) in zip(i,S)]))
+    # return r
+    # return [sum([a*v for (a,v) in zip(i,S)]) for i in product({0,one},repeat=len(S))] if len(S) !=0 else Vec(D,{})
+    # probably spent eight hours trying to grok this;  simple solution hantempo
     s = S.copy()
     k = s.pop()
     s = GF2_span(D, s)
