@@ -66,11 +66,6 @@ def orSearch(inverseIndex, query):
          d |= inverseIndex[w]
     return d
 
-# idx = makeInverseIndex(['Johann Sebastian Bach', 'Johannes Brahms', 'Johann Strauss the Younger', 'Johann Strauss the Elder', ' Johann Christian Bach',  'Carl Philipp Emanuel Bach'])
-# print(idx)
-# print(orSearch(idx, ['Bach','the']))
-# print(orSearch(idx, ['Johann','Carl']))
-
 ## 4: (Task 4) And Search
 def andSearch(inverseIndex, query):
     """
@@ -93,6 +88,3 @@ def andSearch(inverseIndex, query):
             d &= inverseIndex[w]
     return d
 
-# idx = makeInverseIndex(['Johann Sebastian Bach', 'Johannes Brahms', 'Johann Strauss the Younger', 'Johann Strauss the Elder', ' Johann Christian Bach',  'Carl Philipp Emanuel Bach'])
-# print(andSearch(idx, ['Johann', 'the']))
-# print(andSearch(idx, ['Johann', 'Bach']))

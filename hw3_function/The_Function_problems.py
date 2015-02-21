@@ -22,8 +22,6 @@ def tuple_sum(A, B):
     '''
     return [ ((A[i][j]+B[i][j],A[i][j+1]+B[i][j+1])) for i in range(0,len(A)) for j in range(0,len(A[i]),2) if len(A) > 0]
 
-# print( tuple_sum([(1,2), (10,20)],[(3,4), (30,40)]))
-
 ## 2: (Problem 2) Inverse Dictionary
 def inv_dict(d):
     '''

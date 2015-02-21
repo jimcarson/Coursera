@@ -63,8 +63,6 @@ def create_voting_dict(strlist):
 
 mylist = list(open('voting_record_dump109.txt'))
 t = create_voting_dict(mylist)
-#print(t['Snowe'])
-#print(t['Sarbanes'])
 
 
 ## 2: (Task 2.12.2) Policy Compare

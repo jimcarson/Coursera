@@ -19,9 +19,6 @@ def myFilter(L, num):
     '''
     return [i for i in L if i%num != 0]
 
-# print(myFilter([1,2,4,5,7],2))
-# print(myFilter([10,15,20,25],10))
-
 
 ## 2: (Problem 2) Python Comprehensions: Lists of Lists
 
@@ -33,9 +30,6 @@ def my_lists(L):
     [[], [1, 2, 3]]
     '''
     return [[1+i for i in range(j)] for j in L]
-
-# print(my_lists([1,2,4]))
-# print(my_lists([0,3]))
 
 
 ## 3: (Problem 3) Python Comprehensions: Function Composition
@@ -58,10 +52,6 @@ def myFunctionComposition(f, g):
       True
     '''
     return {(k):g[f[k]] for k in f.keys()}
-
-# f = {0:'a',1:'b'}
-# g = {'a':'apple','b':'banana'}
-# print(myFunctionComposition(f,g) )
 
 ## 4: (Problem 4) Summing numbers in a list
 def mySum(L):
@@ -123,10 +113,6 @@ Hint: The value of the Python expression float('infinity') is infinity.
           p = i
     return p
 
-
-# print(myMin([0,3,5,-2,-5]))
-# print(myMin([]))
-
 ## 7: (Problem 7) Concatenation of a List
 def myConcat(L):
     '''
@@ -145,9 +131,6 @@ Be sure your procedure works for the empty list.
     for i in L:
        t += i 
     return t
-
-# print(myConcat(['what','is','up']))
-
 
 ## 8: (Problem 8) Union of Sets in a List
 def myUnion(L):
