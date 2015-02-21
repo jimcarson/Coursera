@@ -72,28 +72,10 @@ def GF2_span(D, S):
     >>> GF2_span(D, {Vec(D, {'a': one, 'b': one}), Vec(D, {'a':one}), Vec(D, {'b':one})}) == {Vec({'a', 'b', 'c'},{'a': one, 'b': one}), Vec({'a', 'b', 'c'},{'b': one}), Vec({'a', 'b', 'c'},{'a': one}), Vec({'a', 'b', 'c'},{})}
     True
 
-    >>> GF2_span(D, {Vec(D, {'a':one, 'c':one}), Vec(D, {'c':one})}) 
-    Vec({'a', 'b', 'c'},{}), Vec({'a', 'b', 'c'},{'a': one, 'c': one}), Vec({'a', 'b', 'c'},{'c': one}), Vec({'a', 'b', 'c'},{'a': one})
-
     >>> S={Vec({0,1},{0:one}), Vec({0,1},{1:one})}
     >>> GF2_span({0,1}, S) == {Vec({0, 1},{0: one, 1: one}), Vec({0, 1},{1: one}), Vec({0, 1},{0: one}), Vec({0, 1},{})}
     True
 
-    >>> S
-    {Vec({0, 1},{1: one}), Vec({0, 1},{0: one})}
-
-    >>> S == {Vec({0, 1},{1: one}), Vec({0, 1},{0: one})}
-    True 
-
-    >>> D = set('abcde')
-    >>> len(D)
-    5
-    >>> S = { Vec(D, {x: one, y:one}) for x in D for y in D if x != y}
-    >>> len(S)
-    10
-    >>> span = GF2_span(D, S)
-    >>> len(span)
-    16
     '''
     '''
     pseudo code:
@@ -110,26 +92,22 @@ def GF2_span(D, S):
 '''
     #if len(S) == 0: 
     #    return Vec(D,{})
-    result = []
-    for i in product({0,one}, repeat=len(S)):
-        result.append(sum([u*v for (u,v) in zip(i,S)]))
-    return result
-
+    # r = set()
+    # for i in product({0,one}, repeat=len(S)):
+    #     r.append(sum([u*v for (u,v) in zip(i,S)]))
+    # return r
     #return [sum([a*v for (a,v) in zip(i,S)]) for i in product({0,one},repeat=len(S))] if len(S) !=0 else Vec(D,{})
-#    l = []
-#    multiplied =[]
-#    for e in S:
-#        a= scalar_mul(e, 0)
-#        multiplied.append(a)
-#        b = scalar_mul(e, 1)
-#        multiplied.append(b)
-#    for i in multiplied:
-#        for j in multiplied:
-#            final = add(i,j)
-#            if final not in l:
-#                l.append(final)
-#    return l
-#    return [sum([a*v for (a,v) in zip(i,S)]) for i in product({0,one},repeat=len(S))] if len(S) !=0 else Vec(D,{})
+    # probably spent eight hours trying to grok this;  simple solution hantempo
+    if len(S) == 0:
+        return {Vec(D,{})}
+    r = set()
+    s = S.copy()
+    k = s.pop()
+    s = GF2_span(D, s)
+    r.update(s)
+    r.update({v + k for v in s})
+    return r
+
 
 ## 4: (Problem 4) Is it a vector space 1
 # {[x,y,z] : x,y,z in R and x+y+z = 1
@@ -148,3 +126,4 @@ is_a_vector_space_3 = False
 is_a_vector_space_4a = True
 # V is the set of 5-vectors over GF(2) that have an odd number of 1s
 is_a_vector_space_4b = False
+
