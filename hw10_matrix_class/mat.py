@@ -1,30 +1,7 @@
-# version code adce68dbbaac+
-coursera = 1
-# Please fill out this stencil and submit using the provided submission script.
-
 # Copyright 2013 Philip N. Klein
 from vec import Vec
 
 #Test your Mat class over R and also over GF(2).  The following tests use only R.
-
-def equal(A, B):
-    """
-    Returns true iff A is equal to B.
-
-    >>> Mat(({'a','b'}, {0,1}), {('a',1):0}) == Mat(({'a','b'}, {0,1}), {('b',1):0})
-    True
-    >>> A = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1})
-    >>> B = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1, ('b',1):0})
-    >>> C = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1, ('b',1):5})
-    >>> A == B
-    True
-    >>> A == C
-    False
-    >>> A == Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1})
-    True
-    """
-    assert A.D == B.D
-    pass
 
 def getitem(M, k):
     """
@@ -36,7 +13,7 @@ def getitem(M, k):
     0
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    pass
+    return M.f[k] if k in M.f else 0
 
 def setitem(M, k, val):
     """
@@ -56,7 +33,7 @@ def setitem(M, k, val):
     True
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    pass
+    M.f[k] = val
 
 def add(A, B):
     """
@@ -80,7 +57,7 @@ def add(A, B):
     True
     """
     assert A.D == B.D
-    pass
+    return Mat(A.D, {i:getitem(A,i) + getitem(B,i) for i in A.f.keys() | B.f.keys()})
 
 def scalar_mul(M, x):
     """
@@ -94,6 +71,29 @@ def scalar_mul(M, x):
     >>> 0.25*M == Mat(({1,3,5}, {2,4}), {(1,2):1.0, (5,4):0.5, (3,4):0.75})
     True
     """
+    return Mat(M.D, {i:x*getitem(M,i) for i in M.f})
+
+def equal(A, B):
+    """
+    Returns true iff A is equal to B.
+
+    >>> Mat(({'a','b'}, {0,1}), {('a',1):0}) == Mat(({'a','b'}, {0,1}), {('b',1):0})
+    True
+    >>> A = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1})
+    >>> B = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1, ('b',1):0})
+    >>> C = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1, ('b',1):5})
+    >>> A == B
+    True
+    >>> A == C
+    False
+    >>> A == Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1})
+    True
+    """
+    assert A.D == B.D
+    for i in A.f.keys() | B.f.keys():
+        if A[i] != B[i]:
+           return False
+    return True
     pass
 
 def transpose(M):
@@ -108,7 +108,7 @@ def transpose(M):
     >>> M.transpose() == Mt
     True
     """
-    pass
+    return Mat((M.D[1], M.D[0]), {(col,row):val for (row,col),val in M.f.items()})
 
 def vector_matrix_mul(v, M):
     """
@@ -128,7 +128,10 @@ def vector_matrix_mul(v, M):
     True
     """
     assert M.D[0] == v.D
-    pass
+    t = Vec(M.D[1],{})
+    for (row, col) in M.f.keys():
+       t[col] = t[col] + M[row, col] * v[row]
+    return t
 
 def matrix_vector_mul(M, v):
     """
@@ -147,7 +150,10 @@ def matrix_vector_mul(M, v):
     True
     """
     assert M.D[1] == v.D
-    pass
+    t = Vec(M.D[0],{})
+    for (row, col) in M.f.keys():
+       t[row] = t[row] + M[row, col] * v[col]
+    return t
 
 def matrix_matrix_mul(A, B):
     """
@@ -173,7 +179,12 @@ def matrix_matrix_mul(A, B):
     True
     """
     assert A.D[1] == B.D[0]
-    pass
+    AB = Mat((A.D[0], B.D[1]), {})
+    for row in A.D[0]:
+       for col in B.D[1]:
+           for i in A.D[1]:
+               AB[row, col] = AB[row, col] + A[row, i] * B[i, col]
+    return AB
 
 ################################################################################
 
