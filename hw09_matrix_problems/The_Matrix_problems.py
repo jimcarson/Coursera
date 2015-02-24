@@ -4,14 +4,15 @@ coursera = 1
 
 from mat import Mat
 from vec import Vec
-
-
-
+from matutil import efficient_rowdict2mat, identity ,keys ,value ,mat2rowdict ,mat2coldict ,coldict2mat ,rowdict2mat ,listlist2mat ,submatrix, mat2listlist
 ## 1: (Problem 4.17.1) Computing matrix-vector products
 # Please represent your solution vectors as lists.
-vector_matrix_product_1 = ...
-vector_matrix_product_2 = ...
-vector_matrix_product_3 = ...
+# print(listlist2mat(list[1,1],list[1,1]))
+
+
+vector_matrix_product_1 = [1,0]
+vector_matrix_product_2 = [0, 4.44]
+vector_matrix_product_3 = [14, 20, 26]
 
 
 
@@ -19,17 +20,17 @@ vector_matrix_product_3 = ...
 # Represent your solution as a list of rowlists.
 # For example, the 2x2 identity matrix would be [[1,0],[0,1]].
 
-M_swap_two_vector = ...
+M_swap_two_vector = [[0,1],[1,0]]
 
 
 
 ## 3: (Problem 4.17.3) [z+x, y, x] Matrix-vector multiplication
-three_by_three_matrix = ... # Represent with a list of rowlists.
+three_by_three_matrix = [[1,0,1],[0,1,0],[1,0,0]] # Represent with a list of rowlists.
 
 
 
 ## 4: (Problem 4.17.4) [2x, 4y, 3z] matrix-vector multiplication
-multiplied_matrix = ... # Represent with a list of row lists.
+multiplied_matrix = [[2,0,0],[0,4,0],[0,0,3]] # Represent with a list of row lists.
 
 
 
@@ -37,82 +38,95 @@ multiplied_matrix = ... # Represent with a list of row lists.
 # Please enter a boolean representing if the multiplication is valid.
 # If it is not valid, please enter None for the dimensions.
 
-part_1_valid = ... # True or False
-part_1_number_rows = ... # Integer or None
-part_1_number_cols = ... # Integer or None
+part_1_valid = False # columnsA != rowsB
+part_1_number_rows = None # 
+part_1_number_cols = None # 
 
-part_2_valid = ...
-part_2_number_rows = ...
-part_2_number_cols = ...
+part_2_valid = False # columnsA != rowsB
+part_2_number_rows = None
+part_2_number_cols = None
 
-part_3_valid = ...
-part_3_number_rows = ...
-part_3_number_cols = ...
+part_3_valid = True
+part_3_number_rows = 1
+part_3_number_cols = 2
 
-part_4_valid = ...
-part_4_number_rows = ...
-part_4_number_cols = ...
+part_4_valid = True
+part_4_number_rows = 2
+part_4_number_cols = 1
 
-part_5_valid = ...
-part_5_number_rows = ...
-part_5_number_cols = ...
+part_5_valid = False # columnsA != rowsB
+part_5_number_rows = None
+part_5_number_cols = None
 
-part_6_valid = ...
-part_6_number_rows = ...
-part_6_number_cols = ...
+part_6_valid = True
+part_6_number_rows = 1
+part_6_number_cols = 1
 
-part_7_valid = ...
-part_7_number_rows = ...
-part_7_number_cols = ...
+part_7_valid = True
+part_7_number_rows = 3
+part_7_number_cols = 3
 
 
 
 ## 6: (Problem 4.17.6) Matrix-matrix multiplication practice with small matrices
 # Please represent your answer as a list of row lists.
 # Example: [[1,1],[2,2]]
-small_mat_mult_1 = ...
-small_mat_mult_2 = ...
-small_mat_mult_3 = ...
-small_mat_mult_4 = ...
-small_mat_mult_5 = ...
-small_mat_mult_6 = ...
+small_mat_mult_1 = [[8, 13], [8, 14]]
+small_mat_mult_2 = [[24, 11, 4], [1, 3, 0]]
+small_mat_mult_3 = [[3, 13]]
+small_mat_mult_4 = [[14]]
+small_mat_mult_5 = [[1, 2, 3], [2, 4, 6], [3, 6, 9]]
+small_mat_mult_6 = [[-2, 4], [1, 1], [1, -3]]
 
 
 
 ## 7: (Problem 4.17.7) Matrix-matrix multiplication practice with a permutation matrix
 # Please represent your solution as a list of row lists.
 
-part_1_AB = ...
-part_1_BA = ...
+A = listlist2mat([[ 2,  0,  1,  5], [ 1, -4,  6,  2], [ 3,  0, -4,  2], [ 3,  4,  0, -2]])
+B1= listlist2mat([[ 0,  1,  0,  0], [ 0,  0,  1,  0], [ 0,  0,  0,  1], [ 1,  0,  0,  0]])
+B2= listlist2mat([[ 0,  0,  0,  1], [ 0,  0,  1,  0], [ 0,  1,  0,  0], [ 1,  0,  0,  0]])
+B3= listlist2mat([[ 0,  0,  0,  1], [ 0,  1,  0,  0], [ 1,  0,  0,  0], [ 0,  0,  1,  0]])
 
-part_2_AB = ...
-part_2_BA = ...
+part_1_AB = mat2listlist(A*B1)
+part_1_BA = mat2listlist(B1*A)
 
-part_3_AB = ...
-part_3_BA = ...
+part_2_AB = mat2listlist(A*B2)
+part_2_BA = mat2listlist(B2*A)
+
+part_3_AB = mat2listlist(A*B3)
+part_3_BA = mat2listlist(B3*A)
 
 
 
 ## 8: (Problem 4.17.9) Matrix-matrix multiplication practice with very sparse matrices
 # Please represent your answer as a list of row lists.
+A  = listlist2mat([[ 4,  2,  1, -1], [ 1,  5, -2,  3], [ 4,  4,  4,  0], [-1,  6,  2, -5]])
 
-your_answer_a_AB = ...
-your_answer_a_BA = ...
+Ba = listlist2mat([[ 0,  0,  0,  0], [ 0,  0,  1,  0], [ 0,  0,  0,  0], [ 0,  0,  0,  0]])
+Bb = listlist2mat([[ 0,  0,  0,  0], [ 0,  1,  0,  0], [ 0,  0,  0,  0], [ 0,  0,  1,  0]])
+Bc = listlist2mat([[ 1,  0,  0,  0], [ 1,  0,  0,  0], [ 0,  0,  0,  0], [ 0,  0,  0,  0]])
+Bd = listlist2mat([[ 0,  1,  0,  1], [ 0,  0,  0,  0], [ 0,  0,  0,  0], [ 0,  1,  0,  0]])
+Be = listlist2mat([[ 0,  0,  0,  2], [ 0,  0,  0,  0], [ 0,  0,  0,  0], [ 0, -3,  0,  0]])
+Bf = listlist2mat([[-1,  0,  0,  0], [ 0,  2,  0,  0], [ 0,  0,  2,  0], [ 0,  0,  0,  3]])
 
-your_answer_b_AB = ...
-your_answer_b_BA = ...
+your_answer_a_AB = mat2listlist(A*Ba)
+your_answer_a_BA = mat2listlist(Ba*A)
 
-your_answer_c_AB = ...
-your_answer_c_BA = ...
+your_answer_b_AB = mat2listlist(A*Bb)
+your_answer_b_BA = mat2listlist(Bb*A)
 
-your_answer_d_AB = ...
-your_answer_d_BA = ...
+your_answer_c_AB = mat2listlist(A*Bc)
+your_answer_c_BA = mat2listlist(Bc*A)
 
-your_answer_e_AB = ...
-your_answer_e_BA = ...
+your_answer_d_AB = mat2listlist(A*Bd)
+your_answer_d_BA = mat2listlist(Bd*A)
 
-your_answer_f_AB = ...
-your_answer_f_BA = ...
+your_answer_e_AB = mat2listlist(A*Be)
+your_answer_e_BA = mat2listlist(Be*A)
+
+your_answer_f_AB = mat2listlist(A*Bf)
+your_answer_f_BA = mat2listlist(Bf*A)
 
 
 
