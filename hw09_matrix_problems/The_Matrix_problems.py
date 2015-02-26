@@ -4,7 +4,7 @@ coursera = 1
 
 from mat import Mat
 from vec import Vec
-from matutil import efficient_rowdict2mat, identity ,keys ,value ,mat2rowdict ,mat2coldict ,coldict2mat ,rowdict2mat ,listlist2mat ,submatrix, mat2listlist
+from matutil import efficient_rowdict2mat, identity ,keys ,value ,mat2rowdict ,mat2coldict ,coldict2mat ,rowdict2mat ,listlist2mat ,submatrix, m2ll
 ## 1: (Problem 4.17.1) Computing matrix-vector products
 # Please represent your solution vectors as lists.
 # print(listlist2mat(list[1,1],list[1,1]))
@@ -88,14 +88,14 @@ B1= listlist2mat([[ 0,  1,  0,  0], [ 0,  0,  1,  0], [ 0,  0,  0,  1], [ 1,  0,
 B2= listlist2mat([[ 0,  0,  0,  1], [ 0,  0,  1,  0], [ 0,  1,  0,  0], [ 1,  0,  0,  0]])
 B3= listlist2mat([[ 0,  0,  0,  1], [ 0,  1,  0,  0], [ 1,  0,  0,  0], [ 0,  0,  1,  0]])
 
-part_1_AB = mat2listlist(A*B1)
-part_1_BA = mat2listlist(B1*A)
+part_1_AB = m2ll(A*B1)
+part_1_BA = m2ll(B1*A)
 
-part_2_AB = mat2listlist(A*B2)
-part_2_BA = mat2listlist(B2*A)
+part_2_AB = m2ll(A*B2)
+part_2_BA = m2ll(B2*A)
 
-part_3_AB = mat2listlist(A*B3)
-part_3_BA = mat2listlist(B3*A)
+part_3_AB = m2ll(A*B3)
+part_3_BA = m2ll(B3*A)
 
 
 
@@ -110,36 +110,34 @@ Bd = listlist2mat([[ 0,  1,  0,  1], [ 0,  0,  0,  0], [ 0,  0,  0,  0], [ 0,  1
 Be = listlist2mat([[ 0,  0,  0,  2], [ 0,  0,  0,  0], [ 0,  0,  0,  0], [ 0, -3,  0,  0]])
 Bf = listlist2mat([[-1,  0,  0,  0], [ 0,  2,  0,  0], [ 0,  0,  2,  0], [ 0,  0,  0,  3]])
 
-your_answer_a_AB = mat2listlist(A*Ba)
-your_answer_a_BA = mat2listlist(Ba*A)
+your_answer_a_AB = m2ll(A*Ba)
+your_answer_a_BA = m2ll(Ba*A)
 
-your_answer_b_AB = mat2listlist(A*Bb)
-your_answer_b_BA = mat2listlist(Bb*A)
+your_answer_b_AB = m2ll(A*Bb)
+your_answer_b_BA = m2ll(Bb*A)
 
-your_answer_c_AB = mat2listlist(A*Bc)
-your_answer_c_BA = mat2listlist(Bc*A)
+your_answer_c_AB = m2ll(A*Bc)
+your_answer_c_BA = m2ll(Bc*A)
 
-your_answer_d_AB = mat2listlist(A*Bd)
-your_answer_d_BA = mat2listlist(Bd*A)
+your_answer_d_AB = m2ll(A*Bd)
+your_answer_d_BA = m2ll(Bd*A)
 
-your_answer_e_AB = mat2listlist(A*Be)
-your_answer_e_BA = mat2listlist(Be*A)
+your_answer_e_AB = m2ll(A*Be)
+your_answer_e_BA = m2ll(Be*A)
 
-your_answer_f_AB = mat2listlist(A*Bf)
-your_answer_f_BA = mat2listlist(Bf*A)
+your_answer_f_AB = m2ll(A*Bf)
+your_answer_f_BA = m2ll(Bf*A)
 
 
 
 ## 9: (Problem 4.17.11) Column-vector and row-vector matrix multiplication
-column_row_vector_multiplication1 = Vec({0, 1}, {...})
-
-column_row_vector_multiplication2 = Vec({0, 1, 2}, {...})
-
-column_row_vector_multiplication3 = Vec({0, 1, 2, 3}, {...})
-
-column_row_vector_multiplication4 = Vec({0,1}, {...})
-
-column_row_vector_multiplication5 = Vec({0, 1, 2}, {...})
+# column_row_vector_multiplication1 = m2ll(listlist2mat([[ 2,  3,  1], [ 1,  3,  4]]) * listlist2mat([[2],[2],[3]]))
+# column_row_vector_multiplication2 = m2ll(listlist2mat([[ 2,  4,  1]]) * listlist2mat([[1,2,0],[5,1,1],[2,3,0]]))
+column_row_vector_multiplication1 = Vec({0, 1}, {0:13, 1:20})
+column_row_vector_multiplication2 = Vec({0, 1, 2}, {0:24, 1:11, 2:4})
+column_row_vector_multiplication3 = Vec({0, 1, 2, 3}, {0:4, 1:8, 2:11, 3:3})
+column_row_vector_multiplication4 = Vec({0, 1}, {0:30, 1:16})
+column_row_vector_multiplication5 = Vec({0, 1, 2}, {0:-3, 1:1, 2:9})
 
 
 
@@ -165,7 +163,7 @@ def lin_comb_mat_vec_mult(M, v):
     True
     '''
     assert(M.D[1] == v.D)
-    pass
+    return sum((v[key]*value for key,value in mat2coldict(M).items()))
 
 
 
@@ -190,7 +188,7 @@ def lin_comb_vec_mat_mult(v, M):
       True
     '''
     assert(v.D == M.D[0])
-    pass
+    return sum((v[key]*value for key,value in mat2rowdict(M).items()))
 
 
 
@@ -213,7 +211,7 @@ def dot_product_mat_vec_mult(M, v):
     True
     '''
     assert(M.D[1] == v.D)
-    pass
+    return Vec(M.D[0], {key:value * v for key, value in mat2rowdict(M).items()})
 
 
 
@@ -235,7 +233,7 @@ def dot_product_vec_mat_mult(v, M):
       True
       '''
     assert(v.D == M.D[0])
-    pass
+    return Vec(M.D[1], {key:value * v for key, value in mat2coldict(M).items()})
 
 
 
@@ -243,14 +241,13 @@ def dot_product_vec_mat_mult(v, M):
 # You are also allowed to use the matutil module
 def Mv_mat_mat_mult(A, B):
     assert A.D[1] == B.D[0]
-    pass
-
+    return coldict2mat({col:A*s for col,s in mat2coldict(B).items()}) 
 
 
 ## 15: (Problem 4.17.18) Vector-matrix matrix-matrix multiply
 def vM_mat_mat_mult(A, B):
     assert A.D[1] == B.D[0]
-    pass
+    return rowdict2mat({row:s * B for row,s in mat2rowdict(A).items()})
 
 
 
@@ -298,22 +295,22 @@ is_good2 = ...
 
 
 ## 17: (Problem 4.17.21) Solving 2x2 linear systems and finding matrix inverse
-solving_systems_x1 = ...
-solving_systems_x2 = ...
-solving_systems_y1 = ...
-solving_systems_y2 = ...
-solving_systems_m = Mat(({0, 1}, {0, 1}), {...})
-solving_systems_a = Mat(({0, 1}, {0, 1}), {...})
-solving_systems_a_times_m = Mat(({0, 1}, {0, 1}), {...})
-solving_systems_m_times_a = Mat(({0, 1}, {0, 1}), {...})
+solving_systems_x1 = -1 / 5
+solving_systems_x2 =  2 / 5
+solving_systems_y1 =  4 / 5
+solving_systems_y2 = -3 / 5
+solving_systems_m = Mat(({0, 1}, {0, 1}), {(0, 0): -1/5, (0 ,1): 4/5, (1, 0): 2/5, (1, 1): -3/5})
+solving_systems_a = Mat(({0, 1}, {0, 1}), {(0, 0):  3, (0, 1): 4, (1, 0): 2, (1, 1):1})
+solving_systems_a_times_m = Mat(({0, 1}, {0, 1}), {(0, 0): 1,(1, 1):1})
+solving_systems_m_times_a = Mat(({0, 1}, {0, 1}), {(0, 0): 1,(1, 1):1})
 
 
 
 ## 18: (Problem 4.17.22) Matrix inverse criterion
 # Please write your solutions as booleans (True or False)
 
-are_inverses1 = ...
-are_inverses2 = ...
-are_inverses3 = ...
-are_inverses4 = ...
+are_inverses1 = True
+are_inverses2 = True
+are_inverses3 = False
+are_inverses4 = False
 

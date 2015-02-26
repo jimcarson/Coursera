@@ -114,7 +114,7 @@ def listlist2mat(L):
     m,n = len(L), len(L[0])
     return Mat((set(range(m)),set(range(n))), {(r,c):L[r][c] for r in range(m) for c in range(n)})
 
-def mat2listlist(L):
+def m2ll(L):
     """
     >>> A=listlist2mat([[2, 0, 1, 5], [1, -4, 6, 2], [3, 0, -4, 2], [3, 4, 0, -2]])
     >>> mat2listlist(A)
