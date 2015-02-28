@@ -258,38 +258,44 @@ from GF2 import one
 def D(n): return {(i,j) for i in range(n) for j in range(n)}
 
 def button_vectors(n):
-  return {(i,j):Vec(D(n),dict([((x,j),one) for x in range(max(i-1,0), min(i+2,n))]
-                           +[((i,y),one) for y in range(max(j-1,0), min(j+2,n))]))
-                           for (i,j) in D(n)}
+  return {(i,j):Vec(D(n),dict([((x,j),one) for x in range(max(i-1,0), min(i+2,n))] +[((i,y),one) for y in range(max(j-1,0), min(j+2,n))])) for (i,j) in D(n)}
 
 # Remind yourself of the types of the arguments to solve().
 
+# solve(A,b,epsilon)  where A is an instance of Mat, b is an instance of Vec
+#    and epsilon is tolerance
+# output: a vector U such that A u = v, within some error tolerance
+# solution = solve (M.transpose(), b)
+# print(solution)
+
 ## PART 1
 
-b1=Vec(D(9),{(7, 8):one,(7, 7):one,(6, 2):one,(3, 7):one,(2, 5):one,(8, 5):one,(1, 2):one,(7, 2):one,(6, 3):one,(0, 4):one,(2, 2):one,(5, 0):one,(6, 4):one,(0, 0):one,(5, 4):one,(1, 4):one,(8, 7):one,(0, 8):one,(6, 5):one,(2, 7):one,(8, 3):one,(7, 0):one,(4, 6):one,(6, 8):one,(0, 6):one,(1, 8):one,(7, 4):one,(2, 4):one})
 
-
+b1=Vec(D(9),{ (0, 0):one, (0, 4):one, (0, 6):one, (0, 8):one, (1, 2):one, (1, 4):one, (1, 8):one, (2, 2):one, (2, 4):one, (2, 5):one, (2, 7):one, (3, 7):one, (4, 6):one, (5, 0):one, (5, 4):one, (6, 2):one, (6, 3):one, (6, 4):one, (6, 5):one, (6, 8):one, (7, 0):one, (7, 2):one, (7, 4):one, (7, 7):one, (7, 8):one, (8, 3):one, (8, 5):one, (8, 7):one }) 
 #Solution given by solver.
-x1 = ...
+#print(D(9))
+B = coldict2mat(button_vectors(9))
+#print(b1)
+
+x1 = solve(B,b1)
 
 #residual
-r1 = ...
+r1 = b1 - B * x1
 
 #Is x1 really a solution? Assign True if yes, False if no.
-is_good1 = ...
+is_good1 = (B * x1 == b1)
 
 ## PART 2
 
-b2=Vec(D(9), {(3,4):one, (6,7):one})
-
+b2 = Vec(D(9), {(3,4):one, (6,7):one})
 #Solution given by solver
-x2 = ...
+x2 = solve(B, b2)
 
 #residual
-r2 = ...
+r2 = b2 - B * x2
 
 #Is it really a solution? Assign True if yes, False if no.
-is_good2 = ...
+is_good2 = (B * x2 == b2)
 
 
 
