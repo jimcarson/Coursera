@@ -1,3 +1,7 @@
+# version code 542eddf1f327+
+coursera = 1
+# Please fill out this stencil and submit using the provided submission script.
+
 # Copyright 2013 Philip N. Klein
 from vec import Vec
 
@@ -253,3 +257,4 @@ class Mat:
 
     def __iter__(self):
         raise TypeError('%r object is not iterable' % self.__class__.__name__)
+
