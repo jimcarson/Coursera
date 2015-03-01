@@ -19,3 +19,21 @@ Python homeworks for the Coding the Matrix class offered on Coursera
 * hw09\_matrix\_problems - Explore the world of matrices.  What is the matrix?
 * hw10\_matrix\_class - implment Mat
 * hw11\_error\_correcting\_code - Hamming time!
+
+###Week 4###
+* hw12\_basis\_problems
+* hw13\_geometry\_lab
+
+###Week 5###
+* hw14\_perspective\_lab
+* hw15\_dimension\_problems
+
+###Week 6###
+* hw16\_gaussian\_elimination
+* hw17\_innerproduct
+* hw18\_secret\_sharing
+* hw19\_factoring\_lab
+
+###Week 7###
+* hw20\_machine\_learning\_lab
+* hw21\_orthoganlization\_problems
