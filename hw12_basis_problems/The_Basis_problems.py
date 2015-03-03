@@ -29,7 +29,7 @@ rep_3 = [0.0,  1.0, -1.0]  # 0 1 1 2
 # Span = listlist2mat([[0,0,1], [2,0,1], [4,1,2]])
 lin_comb_coefficients_1 = [ 3.0, -1.0,  1.0] # 2 1 4
 lin_comb_coefficients_2 = [ 0.5, -1.5,  1.0] # 1,1,1
-lin_comb_coefficients_3 = [-0.5, -5.5,  4.0] # 5,4,3
+lin_comb_coefficients_3 = [ 0.5, -5.5,  4.0] # 5,4,3
 lin_comb_coefficients_4 = [ 1.0, -2.0,  1.0] # 0,1,1
 
 ## 3: (Problem 3) Span of Vectors over GF2 A
