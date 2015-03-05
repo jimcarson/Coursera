@@ -4,7 +4,7 @@ coursera = 1
 
 from GF2 import one
 from math import sqrt, pi
-from matutil import coldict2mat
+from matutil import coldict2mat, rowdict2mat
 from solver import solve
 from vec import Vec
 from vecutil import list2vec
@@ -49,29 +49,39 @@ gf2_rep_3 = [ one, one,   0, one]
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
-gf2_lc_rep_1 = [...]
-gf2_lc_rep_2 = [...]
-gf2_lc_rep_3 = [...]
-gf2_lc_rep_4 = [...]
+#      a     b    c    d    e    f    g    h
+# v1   one   one
+# v2         one  one
+# v3   one             one
+# v4         one            one
+# v5              one       one
+# v6                   one  one
+# v7                             one       one
+# v8                                  one  one
 
+gf2_lc_rep_1 = [one, one, one,   0,   0,   0,   0,   0 ] # 0 0 one one 0 0 0 0 
+gf2_lc_rep_2 = [one, one, one,   0, one, one, one, one ] # 0 0 0 0 0 one one 0
+gf2_lc_rep_3 = [  0, one, one, one, one, one,   0,   0 ] # one 0 0 0 one 0 0 0 
+gf2_lc_rep_4 = [  0, one,   0,   0, one, one,   0,   0 ] # 0 one 0 one 0 0 0 0 
+ 
 
 
 ## 5: (Problem 5) Linear Dependence over R A
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
-lin_dep_R_1 = [...]
-lin_dep_R_2 = [...]
-lin_dep_R_3 = [...]
+lin_dep_R_1 = [-2.0, 1.0, 1.0]  # [1,2,0], [2,4,1], [0,0,-1]
+lin_dep_R_2 = [-4.0, 1.0,-4.0/7.0]  # [2,4,0], [8,16,4], [0,0,7]
+lin_dep_R_3 = [-0.3, 0.0, 0.0, 1.0, 3.0]  # [0,0,5], [1,34,2],[123,456,789],[-3,-6,0],[1,2, 0.5]
 
 
 
 ## 6: (Problem 6) Linear Dependence over R B
 # Please record your solution as a list of coefficients
 
-linear_dep_R_1 = [...]
-linear_dep_R_2 = [...]
-linear_dep_R_3 = [...]
+linear_dep_R_1 = [1, -1, 3] # [1,2,3], [4,5,6], [1,1,1]
+linear_dep_R_2 = [ 2 * sqrt(2), sqrt(2)/pi, 1 ] # [0, -1, 0, -1] [pi, pi, pi, pi], [-sqrt(2), sqrt(2), -sqrt(2), sqrt(2)]
+linear_dep_R_3 = [ 1, 1, 1, 1, 1] # [1, -1, 0, 0, 0], [0, 1, -1, 0, 0], [0, 0, 1, -1, 0], [0,0,0,1,-1], [-1,0,0,0,1]
 
 
 
@@ -82,20 +92,20 @@ linear_dep_R_3 = [...]
 # For example, if you want to say that w equals 2*u+3*v, you would
 # assign 'w' to sum_to, assign 2 to u_coeff, and assign 3 to v_coeff.
 # (In this case, it would not matter what was assigned to w_coeff.)
-sum_to = ...
-u_coeff = ...
-v_coeff = ...
-w_coeff = ...
+sum_to = 'u'
+u_coeff = 1    # [3,9,6,5,5]
+v_coeff = 1    # [4,10,6,6,8]
+w_coeff = -1   # [1,1,0,1,3]
 
 
 
 ## 8: (Problem 8) 4 linearly dependent vectors, every 3 are independent
 # Please use the Vec class to represent your vectors
 
-indep_vec_1 = Vec({...}, {...})
-indep_vec_2 = Vec({...}, {...})
-indep_vec_3 = Vec({...}, {...})
-indep_vec_4 = Vec({...}, {...})
+indep_vec_1 = Vec({0,1,2},{0:1, 1:0, 2:0})
+indep_vec_2 = Vec({0,1,2},{0:1, 1:1, 2:1})
+indep_vec_3 = Vec({0,1,2},{0:0, 1:1, 2:0})
+indep_vec_4 = Vec({0,1,2},{0:0, 1:0, 2:1})
 
 
 
@@ -103,44 +113,59 @@ indep_vec_4 = Vec({...}, {...})
 # For each subproblem, assign to the corresponding variable the list of
 # coefficients (0 or one) for which the linear combination is zero.
 
-zero_comb_1 = [...]
-zero_comb_2 = [...]
-zero_comb_3 = [...]
+zero_comb_1 = [one,one,  0,one] # [one,one,one,one], [one,0,one,0], [0,one,one,0], [0,one,0,one]
+zero_comb_2 = [  0,one,one,one] # [0,0,0,one], [0,0,one,0], [one,one,0,one], [one,one,one,one]
+zero_comb_3 = [one,one,  0,  0,one] # [one,one,0,one,one], [0,0,one,0,0], [0,0,one,one,one], [one,0,one,one,one], [one,one,one,one,one]
 
 
 
 ## 10: (Problem 10) Linear Dependence over GF(2) B
 # In each subproblem, give your solution as a list of coefficients selected from {0, one}
 
+
+#      a     b    c    d    e    f    g    h
+# v1   one   one
+# v2         one  one
+# v3   one             one
+# v4         one            one
+# v5              one       one
+# v6                   one  one
+# v7                             one       one
+# v8                                  one  one
+
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v5]
-sum_to_zero_1 = [...]
+sum_to_zero_1 = [  0, one,   0, one, one] # v1, v2, v3, v4, v5
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v5, coeff of v7, coeff of v8]
-sum_to_zero_2 = [...]
+sum_to_zero_2 = [  0, one,   0, one, one,   0,   0] # v1, v2, v3, v4, v5, v7, v8
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v6]
-sum_to_zero_3 = [...]
+sum_to_zero_3 = [one,    0, one, one, one] # v1, v2, v3, v4, v6
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v5, coeff of v6, coeff of v7, coeff of v8]
-sum_to_zero_4 = [...]
+sum_to_zero_4 = [one, one, one, one, one,   0,   0] # v1, v2, v3, v5, v6, v7, v8
 
 
 
 ## 11: (Problem 11) Exchange Lemma for Vectors over $\R$
 ## Please express your answer as a list of ints, such as [1,0,0,0,0]
+# S = {[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1]}
+# A = {[1,0,0,0,0], [0,1,0,0,0]}
+# For each of the following vectors, z, find a vector w in S - A such that 
+# Span S = Span (S U {z} - {w})
 
-exchange_1 = [...]
-exchange_2 = [...]
-exchange_3 = [...]
+exchange_1 = [0,0,1,0,0] # z = [1,1,1,1,1]
+exchange_2 = [0,0,0,1,0] # z = [0,1,0,1,0]
+exchange_3 = [0,0,0,0,1] # z = [1,0,1,0,1]
 
 
 
 ## 12: (Problem 12) Exchange Lemma for Vectors over GF(2)
 # Please give the name of the vector you want to replace as a string (e.g. 'v1')
 
-replace_1 = ...
-replace_2 = ...
-replace_3 = ...
+replace_1 = 'v3' # A = {v1,v4}, z = (0, 0, 0, 1, 1, 0, 0, 0)
+replace_2 = 'v1' # A = {v2,v3}, z = (0, 0, 1, 1, 0, 0, 0, 0)
+replace_3 = 'v1' # A = {v2,v3}, z = (1, 0, 0, 0, 1, 0, 0, 0)
 
 
 
@@ -162,7 +187,8 @@ def rep2vec(u, veclist):
         >>> rep2vec(Vec({0,1,2}, {0:2, 1:4}), [v0, v1, v2]) == Vec({'d', 'a', 'c', 'b'},{'a': 6, 'c': 0, 'b': 8, 'd': 0})
         True
     '''
-    pass
+    # rep2vec(u, veclist):
+    return coldict2mat(veclist) * u
 
 
 
@@ -182,9 +208,8 @@ def vec2rep(veclist, v):
         >>> vec2rep([v0,v1,v2], v)  == Vec({0, 1, 2},{0: 1.5, 1: -0.25, 2: 1.25})
         True
     '''
-    pass
-
-
+    # vec2rep(veclist,v)
+    return solve(coldict2mat(veclist),v)
 
 ## 15: (Problem 15) Superfluous Vector in Python
 def is_superfluous(S, v):
@@ -193,9 +218,7 @@ def is_superfluous(S, v):
         - S: set of vectors as instances of Vec class
         - v: vector in S as instance of Vec class
     Output:
-        True if the span of the vectors of S is the same
-        as the span of the vectors of S, excluding v.
-
+        True if the span of the vectors of S is the same as the span of the vectors of S, excluding v.
         False otherwise.
     Examples:
     >>> from vec import Vec
@@ -223,10 +246,17 @@ def is_superfluous(S, v):
     >>> is_superfluous(S, list2vec([0,0,0,one]))
     False
     '''
+    ## vec2rep(veclist,v)  = return solve(coldict2mat(veclist),v)
+    ## rep2vec(u, veclist) = return coldict2mat(veclist) * u
     assert v in S
-    pass
-
-
+    if len(S) < 2:
+        return False
+    T = S.copy()
+    T.remove(v)
+    A = coldict2mat(list(T))
+    u = solve(A, v)
+    res = solve(coldict2mat(list(S)),v) -  A*u
+    return (res*res).is_almost_zero()
 
 ## 16: (Problem 16) is_independent in Python
 def is_independent(S):
@@ -255,9 +285,10 @@ def is_independent(S):
     >>> is_independent({list2vec(v) for v in [[one,one,0,0,0],[0,one,one,0,0],[0,0,one,one,0],[0,0,0,one,one]]})
     True
     '''
-    pass
-
-
+    for i in range(1, len(S) - 1):
+      if is_superfluous(S, i):
+         return False
+    return True
 
 ## 17: (Problem 17) Exchange Lemma in Python
 def exchange(S, A, z):
@@ -288,4 +319,3 @@ def exchange(S, A, z):
         True
     '''
     pass
-
