@@ -6,8 +6,11 @@ coursera = 1
 # Please fill out this stencil and submit using the provided submission script.
 
 from mat import Mat
-from vec import Vec
-import math
+from vec import Vec, dot
+from math import cos, sin
+from image_mat_util import *
+from GF2 import one
+import solver
 
 ## Task 1
 def identity(labels = {'x','y','u'}):
@@ -25,7 +28,7 @@ def identity(labels = {'x','y','u'}):
     >>> identity({'r','g','b'})==Mat(({'r','g','b'},{'r','g','b'}), {('r','r'):1, ('g','g'):1, ('b','b'):1})
     True
     '''
-    pass
+    return Mat((labels, labels), { (i,i):1 for i in labels })
 
 ## Task 2
 def translation(x,y):
@@ -36,7 +39,10 @@ def translation(x,y):
     >>> translation(9,10)==Mat(({'x','y','u'},{'x','y','u'}), {('x','x'):1, ('y','y'):1, ('u','u'):1, ('y','u'):10, ('x','u'):9})
     True
     '''
-    pass
+    tmp = identity().f
+    tmp[('x','u')] = x
+    tmp[('y','u')] = y
+    return Mat((identity().D),tmp)
 
 ## Task 3
 def scale(a, b):
@@ -49,7 +55,10 @@ def scale(a, b):
     >>> scale(0,0)*Vec({'x','y','u'}, {'x':1,'y':1,'u':1}) == Vec({'x','y','u'}, {'u':1})
     True
     '''
-    pass
+    tmp = identity().f
+    tmp[('x','x')] = a
+    tmp[('y','y')] = b
+    return Mat((identity().D), tmp)
 
 ## Task 4
 def rotation(angle):
@@ -64,7 +73,12 @@ def rotation(angle):
     >>> normsq(rotation(math.pi/2) * Vec({'u', 'x', 'y'},{'x':3,'y':1,'u':1}) - Vec({'u', 'x', 'y'},{'u': 1, 'x': -1, 'y': 3.0})) < 1e-15
     True
     '''
-    pass
+    tmp = identity().f
+    tmp[('x','x')] = cos(angle)
+    tmp[('x','y')] =-sin(angle)
+    tmp[('y','x')] = sin(angle)
+    tmp[('y','y')] = cos(angle)
+    return Mat((identity().D), tmp)
 
 ## Task 5
 def rotate_about(x,y,angle):
@@ -74,7 +88,7 @@ def rotate_about(x,y,angle):
     Output:  Corresponding 3x3 rotation matrix.
     It might be helpful to use procedures you already wrote.
     '''
-    pass
+    return translation(x, y) * rotation(angle) * translation(-x, -y) 
 
 ## Task 6
 def reflect_y():
@@ -89,7 +103,7 @@ def reflect_y():
     >>> reflect_y()*w == Vec({'x','y','u'},{'u':1})
     True
     '''
-    pass
+    return scale(-1, 1)
 
 ## Task 7
 def reflect_x():
@@ -104,7 +118,7 @@ def reflect_x():
     >>> reflect_x()*w == Vec({'x','y','u'},{'u':1})
     True
     '''
-    pass
+    return scale(1, -1)
 
 ## Task 8    
 def scale_color(scale_r,scale_g,scale_b):
@@ -115,7 +129,11 @@ def scale_color(scale_r,scale_g,scale_b):
     >>> scale_color(1,2,3)*Vec({'r','g','b'},{'r':1,'g':2,'b':3}) == Vec({'r','g','b'},{'r':1,'g':4,'b':9})
     True
     '''
-    pass
+    tmp = identity(labels = {'r', 'g', 'b'}).f
+    tmp[('r', 'r')] = scale_r
+    tmp[('g', 'g')] = scale_g
+    tmp[('b', 'b')] = scale_b
+    return Mat((identity( labels = {'r', 'g', 'b'}).D),tmp)
 
 ## Task 9
 def grayscale():
@@ -123,7 +141,13 @@ def grayscale():
     Input: None
     Output: 3x3 greyscale matrix.
     '''
-    pass
+    # Reference in matplotlib is (0.299, 0.587, 0.114)
+    tmp = identity(labels = {'r', 'g', 'b'}).f
+    for l in {'r','g','b'}:
+        tmp[(l,'r')] = (77/256) 
+        tmp[(l,'g')] = (151/256) 
+        tmp[(l,'b')] = (28/256) 
+    return Mat((identity( labels = {'r', 'g', 'b'}).D),tmp)
 
 ## Task 10
 def reflect_about(x1, y1, x2, y2):
@@ -137,6 +161,7 @@ def reflect_about(x1, y1, x2, y2):
     >>> normsq(reflect_about(0,0,1,1) * Vec({'x','y','u'}, {'x':1, 'u':1}) - Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})) < 1e-15
     True
     '''
+    # rotation, translation, simple reflection
     pass
 
 
