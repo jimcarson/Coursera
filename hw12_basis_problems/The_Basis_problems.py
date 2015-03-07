@@ -246,17 +246,14 @@ def is_superfluous(S, v):
     >>> is_superfluous(S, list2vec([0,0,0,one]))
     False
     '''
-    ## vec2rep(veclist,v)  = return solve(coldict2mat(veclist),v)
-    ## rep2vec(u, veclist) = return coldict2mat(veclist) * u
-    assert v in S
-    if len(S) < 2:
+    if v not in S or v.is_almost_zero():
+        return True
+    if len(S) == 1:
         return False
     T = S.copy()
     T.remove(v)
-    A = coldict2mat(list(T))
-    u = solve(A, v)
-    res = solve(coldict2mat(list(S)),v) -  A*u
-    return (res*res).is_almost_zero()
+    u = vec2rep(list(T), v)
+    return (v -  rep2vec(u, list(T))).is_almost_zero()
 
 ## 16: (Problem 16) is_independent in Python
 def is_independent(S):
@@ -285,10 +282,11 @@ def is_independent(S):
     >>> is_independent({list2vec(v) for v in [[one,one,0,0,0],[0,one,one,0,0],[0,0,one,one,0],[0,0,0,one,one]]})
     True
     '''
-    for i in range(1, len(S) - 1):
-      if is_superfluous(S, i):
+    for v in S:
+      if is_superfluous(S, v):
          return False
     return True
+
 
 ## 17: (Problem 17) Exchange Lemma in Python
 def exchange(S, A, z):
@@ -315,7 +313,30 @@ def exchange(S, A, z):
         >>> S = {Vec({0,1,2,3,4}, {i:one, (i+1)%5:one}) for i in range(5)}
         >>> A = {list2vec([0,one,one,0,0]),list2vec([0,0,one,one,0])}
         >>> z = list2vec([0,0,one,0,one])
-        >>> exchange(S, A, z) == Vec({0, 1, 2, 3, 4},{3: one, 4: one})
+        >>> exchange(S, A, z) in {list2vec(v) for v in [[one, one,0,0,0],[one,0,0,0,one],[0,0,0,one,one]]}
+        True
+        >>> from The_Basis_problems import exchange
+        >>> from vec import Vec
+        >>> from GF2 import one
+        >>> D = {0,1,2,3}
+        >>> S = {Vec(D,{0:one, 2:one}), Vec(D,{0:one, 1:one, 2:one, 3:one}), Vec(D,{0:one, 1:one}), Vec(D,{0:one, 1:one, 2:one})}
+        >>> A = {Vec(D,{0:one, 1:one, 2:one})}
+        >>> z = Vec(D,{1:one})
+        >>> exchange(S, A, z) == Vec(D,{0:one, 2:one})
+        True
+        >>> D = {0,1,2,3,4}
+        >>> S = {Vec(D,{3:one}), Vec(D,{0:one, 4:one}), Vec(D,{0:one, 2:one, 3:one, 4:one}), Vec(D,{1:one, 2:one, 3:one, 4:one}), Vec(D,{0:one, 1:one, 2:one}), Vec(D,{0:one, 1:one, 4:one})}
+        >>> A = {Vec(D,{0:one, 4:one}), Vec(D,{1:one, 2:one, 3:one, 4:one}), Vec(D,{3:one}), Vec(D,{0:one, 1:one, 2:one})}
+        >>> z = Vec(D,{1:one, 3:one, 4:one})
+        >>> exchange(S, A, z)== Vec(D,{0:one, 2:one, 3:one, 4:one})
         True
     '''
-    pass
+    # if not is_independent(A|{z}): return None
+    # Output: a vector w in S but not in A such that Span S = Span ({z} | S - {w})
+    for w in S:
+      if w not in A and is_independent({z} | S - {w}):
+          return w
+    return z
+    assert "crap"
+    # return Vec(z.D,{}) #None
+    # solve, is_superfluous
