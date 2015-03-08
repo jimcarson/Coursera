@@ -330,13 +330,13 @@ def exchange(S, A, z):
         >>> z = Vec(D,{1:one, 3:one, 4:one})
         >>> exchange(S, A, z)== Vec(D,{0:one, 2:one, 3:one, 4:one})
         True
+        >>> print(exchange(S, A, z))
+        Vec(D,{0:one, 2:one, 3:one, 4:one})
     '''
     # if not is_independent(A|{z}): return None
     # Output: a vector w in S but not in A such that Span S = Span ({z} | S - {w})
-    for w in S:
-      if w not in A and is_independent({z} | S - {w}):
-          return w
-    return z
-    assert "crap"
-    # return Vec(z.D,{}) #None
     # solve, is_superfluous
+    for w in S:
+      if w not in A and is_superfluous({z} | S, w):
+          return w
+    return w
