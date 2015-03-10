@@ -1,0 +1,1 @@
+../resources/independence.py
