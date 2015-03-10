@@ -7,7 +7,7 @@ coursera = 1
 
 from mat import Mat
 from vec import Vec, dot
-from math import cos, sin
+from math import cos, sin, atan2
 from image_mat_util import *
 from GF2 import one
 import solver
@@ -15,12 +15,10 @@ import solver
 ## Task 1
 def identity(labels = {'x','y','u'}):
     '''
-    In case you have never seen this notation for a parameter before,
-    it defines the default value of labels to be {'x','y','u'}.
-    You should write your procedure as if 
-    it were defined 'def identity(labels):'.  However, if you want the labels of 
-    your identity matrix to be {'x','y','u'}, you can just call 
-    identity().  If you want {'r','g','b'}, or another set, to be the
+    In case you have never seen this notation for a parameter before, it defines the default value 
+    of labels to be {'x','y','u'}.  You should write your procedure as if it were defined 
+    'def identity(labels):'.  However, if you want the labels of your identity matrix to 
+    be {'x','y','u'}, you can just call identity().  If you want {'r','g','b'}, or another set, to be the
     labels of your matrix, you can call identity({'r','g','b'}).  
 
     >>> identity()==Mat(({'x','y','u'},{'x','y','u'}), {('x','x'):1, ('y','y'):1, ('u','u'):1})
@@ -149,6 +147,10 @@ def grayscale():
         tmp[(l,'b')] = (28/256) 
     return Mat((identity( labels = {'r', 'g', 'b'}).D),tmp)
 
+
+def midpoint(x1, y1, x2, y2):
+    return ((x1 + x2)/2, (y1 + y2)/2)
+
 ## Task 10
 def reflect_about(x1, y1, x2, y2):
     '''
@@ -160,8 +162,40 @@ def reflect_about(x1, y1, x2, y2):
     True
     >>> normsq(reflect_about(0,0,1,1) * Vec({'x','y','u'}, {'x':1, 'u':1}) - Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})) < 1e-15
     True
+    >>> normsq(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}) - Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})) < 1e-15
+    True
     '''
+    #>>> reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}) 
+    #Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})
     # rotation, translation, simple reflection
-    pass
+    # atan2
+    (midx, midy) = midpoint(x1, y1, x2, y2)
+    angle = atan2(y2 - y1, x2 - x1) 
+    print("angle is",angle)
+    # return rotation(angle) * translation(x1,y1) * reflect_x() * translation(-x1,-y1)* rotation(-angle) 
+    # return rotation(angle) * translation(x1,y1) * reflect_x() * translation(x1,-y1)* rotation(-angle) 
+    # return rotation(angle) * translation(midx,midy) * reflect_x() * translation(midx,-midy)* rotation(-angle) 
+    #print("from (",x1,",",y1,"), (",x2,",",y2,"), rotation(",angle,") =", rotation(angle))
+    #print("translation(",x1,",",y1,") = ",translation(x1,y1))
+    #print("translation(",-x1,",",-y1,") = ",translation(-x1,-y1))
+    #print("translation(",x2,",",y2,") = ",translation(x2,y2))
+    #print("translation(",midx,",",midy,") = ",translation(midx,midy))
+    #print("reflect_x() = ",reflect_x())
+    # return rotation(angle) * translation(x1,y1) * reflect_x() * translation(-x1,-y1)* rotation(-angle) 
+    return rotate_about(midx,midy,angle) * translation(midx,midy) * reflect_x() * translation(-midx,-midy)* rotate_about(midx,midy,-angle)
+    # return reflect_x() * reflect_y() # rotation(angle) * translation(x1,y1) * reflect_x() * translation(-x1,-y1)* rotation(-angle) 
 
 
+
+from vec import Vec
+print(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
+(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
+print("reflect_about(2.5, -4, 9, 1)*Vec({'x','y','u'}, {'x':25,'y':7,'u':1}))", reflect_about(2.5, -4, 9, 1)*Vec({'x','y','u'}, {'x':25,'y':7,'u':1}))
+print("reflect_about(14, 20, -5, -8)*Vec({'x','y','u'}, {'x':1,'y':2,'u':1})" ,reflect_about(14, 20, -5, -8)*Vec({'x','y','u'}, {'x':1,'y':2,'u':1}))
+print(reflect_about(0,1,1,1) * Vec({'x','y','u'}, {'u':1}))
+print(reflect_about(0,1,1,1) * Vec({'x','y','u'}, {'u':1}))
+print("Vec({'x', 'u', 'y'},{'x': 0.0, 'u': 1, 'y': 2.0})")
+print(reflect_about(0,0,1,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
+print("Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})")
+print(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
+print("- Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})")
