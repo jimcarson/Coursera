@@ -164,38 +164,15 @@ def reflect_about(x1, y1, x2, y2):
     True
     >>> normsq(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}) - Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})) < 1e-15
     True
+    >>> from matutil import mat2coldict
+    >>> M_test = Mat(({'x','y','u'},{'a','b'}),{('x','a'):1,('u','a'):1,('u','b'):1})
+    >>> M_expected = Mat(({'x','y','u'},{'a','b'}),{('x', 'b'): -1.6, ('u', 'b'): 1, ('y', 'b'): 3.2, ('u', 'a'): 1, ('x', 'a'): -1.0, ('y', 'a'): 4})
+    >>> all([Vec.is_almost_zero(v) for v in mat2coldict(reflect_about(-2,1,2,3) * M_test - M_expected).values()])
+    True
     '''
-    #>>> reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}) 
-    #Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})
     # rotation, translation, simple reflection
     # atan2
     (midx, midy) = midpoint(x1, y1, x2, y2)
     angle = atan2(y2 - y1, x2 - x1) 
-    print("angle is",angle)
-    # return rotation(angle) * translation(x1,y1) * reflect_x() * translation(-x1,-y1)* rotation(-angle) 
-    # return rotation(angle) * translation(x1,y1) * reflect_x() * translation(x1,-y1)* rotation(-angle) 
-    # return rotation(angle) * translation(midx,midy) * reflect_x() * translation(midx,-midy)* rotation(-angle) 
-    #print("from (",x1,",",y1,"), (",x2,",",y2,"), rotation(",angle,") =", rotation(angle))
-    #print("translation(",x1,",",y1,") = ",translation(x1,y1))
-    #print("translation(",-x1,",",-y1,") = ",translation(-x1,-y1))
-    #print("translation(",x2,",",y2,") = ",translation(x2,y2))
-    #print("translation(",midx,",",midy,") = ",translation(midx,midy))
-    #print("reflect_x() = ",reflect_x())
-    # return rotation(angle) * translation(x1,y1) * reflect_x() * translation(-x1,-y1)* rotation(-angle) 
+    # print("angle is",angle)
     return rotate_about(midx,midy,angle) * translation(midx,midy) * reflect_x() * translation(-midx,-midy)* rotate_about(midx,midy,-angle)
-    # return reflect_x() * reflect_y() # rotation(angle) * translation(x1,y1) * reflect_x() * translation(-x1,-y1)* rotation(-angle) 
-
-
-
-from vec import Vec
-print(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
-(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
-print("reflect_about(2.5, -4, 9, 1)*Vec({'x','y','u'}, {'x':25,'y':7,'u':1}))", reflect_about(2.5, -4, 9, 1)*Vec({'x','y','u'}, {'x':25,'y':7,'u':1}))
-print("reflect_about(14, 20, -5, -8)*Vec({'x','y','u'}, {'x':1,'y':2,'u':1})" ,reflect_about(14, 20, -5, -8)*Vec({'x','y','u'}, {'x':1,'y':2,'u':1}))
-print(reflect_about(0,1,1,1) * Vec({'x','y','u'}, {'u':1}))
-print(reflect_about(0,1,1,1) * Vec({'x','y','u'}, {'u':1}))
-print("Vec({'x', 'u', 'y'},{'x': 0.0, 'u': 1, 'y': 2.0})")
-print(reflect_about(0,0,1,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
-print("Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})")
-print(reflect_about(0,1,0,1) * Vec({'x','y','u'}, {'x':1, 'u':1}))
-print("- Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})")
