@@ -126,7 +126,7 @@ def make_nine_equations(corners):
 ## 7: (Task 5.12.4) Build linear system
 # Apply make_nine_equations to the list of tuples specifying the pixel coordinates of the
 # whiteboard corners in the image.  Assign the resulting list of nine vectors to veclist:
-veclist = make_nine_equations([(358,36,0,0), (329,597,0,1), (592,157,1,0), (580,483,1,1)])
+veclist = make_nine_equations([(358,36), (329,597), (592,157), (580,483)])
 
 # Build a Mat whose rows are the Vecs in veclist
 L = rowdict2mat(veclist)
