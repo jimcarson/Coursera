@@ -4,7 +4,7 @@ coursera = 1
 
 from vec import Vec
 from mat import Mat
-from matutil import rowdict2mat
+from matutil import rowdict2mat, mat2coldict, coldict2mat
 from solver import solve
 
 
@@ -19,13 +19,15 @@ def move2board(y):
           in whiteboard coordinates of the point p such that the line through the 
           origin and q intersects the whiteboard plane at p.
     '''
-    return Vec({'y1','y2','y3'}, ...)
+    return Vec({'y1','y2','y3'}, { 'y1' : y['y1'] / y['y3'], 'y2' : y['y2'] / y['y3'], 'y3' : 1})
 
 
 
 ## 2: () Make domain of vector
 # D should be assigned the Cartesian product of R and C
-D = ...
+R = {'y1','y2','y3'}
+C = {'x1','x2','x3'}
+D = {(row, col) for row in R for col in C}
 
 
 
@@ -81,24 +83,20 @@ def make_equations(x1, x2, w1, w2):
 
     Again, the negations of these vectors form an equally valid solution.
     '''
-    u = Vec(D, ...)
-    v = Vec(D, ...)
+    u = Vec(D, {('y3', 'x1'): w1*x1, ('y3', 'x2'): w1*x2, ('y3', 'x3'): w1, ('y1', 'x1'): -x1, ('y1', 'x2'): -x2, ('y1', 'x3'): -1})
+    v = Vec(D, {('y3', 'x1'): w2*x1, ('y3', 'x2'): w2*x2, ('y3', 'x3'): w2, ('y2', 'x1'): -x1, ('y2', 'x2'): -x2, ('y2', 'x3'): -1})
     return [u, v]
 
 
 
 ## 4: () Scaling row
 # This is the vector defining the scaling equation
-w = Vec(D, {...})
-
-
+w = Vec(D, {('y1','x1') : 1})
 
 ## 5: () Right-hand side
 # Now construct the Vec b that serves as the right-hand side for the matrix-vector equation L*hvec=b
 # This is the {0, ..., 8}-Vec whose entries are all zero except for a 1 in position 8
-b = ...
-
-
+b = Vec(set(range(9)), {8:1})
 
 ## 6: () Rows of constraint matrix
 def make_nine_equations(corners):
@@ -116,25 +114,27 @@ def make_nine_equations(corners):
     Vecs u6,u7 come from applying make_equations to the bottom-right corner,
     Vec u8 is the vector w.
     ''' 
-    pass
-
-
+    tmp = []
+    tmp.append(make_equations(corners[0][0],corners[0][1],0,0))
+    tmp.append(make_equations(corners[1][0],corners[1][1],0,1))
+    tmp.append(make_equations(corners[2][0],corners[2][1],1,0))
+    tmp.append(make_equations(corners[3][0],corners[3][1],1,1))
+    tmp = sum(map(list, tmp), [])
+    tmp.append(w) # global!
+    return(tmp)
 
 ## 7: (Task 5.12.4) Build linear system
 # Apply make_nine_equations to the list of tuples specifying the pixel coordinates of the
 # whiteboard corners in the image.  Assign the resulting list of nine vectors to veclist:
-veclist = ...
+veclist = make_nine_equations([(358,36,0,0), (329,597,0,1), (592,157,1,0), (580,483,1,1)])
 
 # Build a Mat whose rows are the Vecs in veclist
-L = ...
-
-
+L = rowdict2mat(veclist)
 
 ## 8: () Solve linear system
 # Now solve the matrix-vector equation to get a Vec hvec, and turn it into a matrix H.
-hvec = ...
-
-H = ...
+hvec = solve(L,b)
+H = Mat(({'y1','y2','y3'}, {'x1','x2','x3'}), {i: hvec[i] for i in D})
 
 
 
@@ -172,5 +172,8 @@ def mat_move2board(Y):
      y3  |     1 1    1    1
     <BLANKLINE>
     '''
-    pass
+    tmp = mat2coldict(Y)
+    for i in tmp:
+        tmp[i] = move2board(tmp[i])
+    return coldict2mat(tmp)
 
