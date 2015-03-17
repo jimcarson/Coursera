@@ -40,7 +40,7 @@ while True:
    vecs = [(secret_a0, secret_b0),(secret_a1,secret_b1),(secret_a2,secret_b2),(secret_a3,secret_b3),(secret_a4,secret_b4)]
    if (all(is_independent(list(sum(x,()))) for x in combinations(vecs,3))):
      break
-print(vecs)
+#print(vecs)
 
 
 #print(str2bits("hello"))
