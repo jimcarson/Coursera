@@ -3,35 +3,37 @@ coursera = 1
 # Please fill out this stencil and submit using the provided submission script.
 
 from matutil import *
+from vecutil import *
 from GF2 import one
+from echelon import *
 
 
 
 ## 1: (Problem 1) Recognizing Echelon Form
 # Write each matrix as a list of row lists
 
-echelon_form_1 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_1 = [[1, 2, 0, 2, 0],
+                  [0, 1, 0, 3, 4],
+                  [0, 0, 2, 3, 4],
+                  [0, 0, 0, 2, 0], # replace the 1
+                  [0, 0, 0, 0, 4]] # replace the 3
 
-echelon_form_2 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_2 = [[0, 4, 3, 4, 4],
+                  [0, 0, 4, 2, 0], # replace the 6 and 5
+                  [0, 0, 0, 0, 1], 
+                  [0, 0, 0, 0, 0]] # replace the 2
 
-echelon_form_3 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_3 = [[1, 0, 0, 1],
+                  [0, 0, 0, 1], # replace the 1
+                  [0, 0, 0, 0]]
 
-echelon_form_4 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_4 = [[1, 0, 0, 0],
+                  [0, 1, 0, 0],
+                  [0, 0, 0, 0], # replace the 1 and 1
+                  [0, 0, 0, 0]]
 
 
-
+ # for each row, the first nonzero entry is in position k and every previous row's non-zero entry is less than k
 ## 2: (Problem 2) Is it echelon?
 def is_echelon(A):
     '''
@@ -55,17 +57,38 @@ def is_echelon(A):
         True
         >>> is_echelon([[0],[1]])
         False
+        >>> is_echelon([[2,1,0],[0,-4,0],[0,0,1]])
+        True
+        >>> is_echelon([[2,1,0],[-4,0,0],[0,0,1]])
+        False
+        >>> is_echelon([[2,1,0],[0,3,0],[1,0.1]])
+        False
+        >>> is_echelon([[1,1,1,1,1],[0,2,0,1,3],[0,0,0,5,3]])
+        True
     '''
-    pass
+    retval = True
+    first_nonzero = list(-1 for i in range(len(A)))
+    for row in range(len(A)):
+      first_nonzero[row] = 0
+      for col, value in enumerate(A[row]):
+        if value != 0:
+           first_nonzero[row] = col
+           break
+    for i in range(1,len(A)):
+       # print("i = ",i,"fnz",first_nonzero)
+       if first_nonzero[i-1] >= first_nonzero[i]:
+         retval = False
+         break
+    return(retval)
 
 
 
 ## 3: (Problem 3) Solving with Echelon Form: No Zero Rows
 # Give each answer as a list
 
-echelon_form_vec_a = ...
-echelon_form_vec_b = ...
-echelon_form_vec_c = ...
+echelon_form_vec_a = [ 1, 0, 3, 0]
+echelon_form_vec_b = [-3, 0,-2, 3]
+echelon_form_vec_c = [-5, 0, 2, 0, 2]
 
 
 
@@ -73,8 +96,8 @@ echelon_form_vec_c = ...
 # If a solution exists, give it as a list vector.
 # If no solution exists, provide "None" (without the quotes).
 
-solving_with_echelon_form_a = ...
-solving_with_echelon_form_b = ...
+solving_with_echelon_form_a = None
+solving_with_echelon_form_b = [21, 0, 2, 0, 0]
 
 
 
