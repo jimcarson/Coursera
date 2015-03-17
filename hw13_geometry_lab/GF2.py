@@ -1,1 +1,0 @@
-../resources/GF2.py
