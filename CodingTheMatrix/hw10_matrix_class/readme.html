@@ -1,0 +1,22 @@
+<h2>
+<span>Matrix Class Homework: Instructions</span>
+</h2>
+
+<p>
+<p>To complete this assignment, please carefully follow the following instructions:</p>
+<ol>
+  <li>Download the detailed instructions for this assignment, <a href="https://d396qusza40orc.cloudfront.net/matrix/mat.pdf">mat.pdf</a></li>
+  <li>Download the stencil, <a href="http://grading.codingthematrix.com/coursera/mat.py"><tt>mat.py</tt></a>, for this assignment, and move it into your <code>matrix</code> folder.</li>
+  <li>You do not need to submit anything marked <em>ungraded</em>.</li>
+  <li>Support code and data resources can be found at the <a href="http://resources.codingthematrix.com/">Coding the Matrix Resources page</a>.  Do not use the <tt>mat.py</tt> stencil on the resources page. Make sure you use the <a href="http://grading.codingthematrix.com/coursera/mat.py">stencil provided on this assignment page</a>.</li>
+  <li>In your implementation of <code>Mat</code>, it's ideal if your procedures vector_matrix_mul, matrix_vector_mul, and matrix_matrix_mul exploit sparsity in the <strong>inputs</strong>. (Although exploiting sparsity is not required for this course, it may help in the future when you study more advanced topics, such as <em>Pagerank</em>.)  However, your procedures should <strong>not</strong> try to discover sparsity in the <strong>output</strong> (e.g. by checking for zeroes).  It's almost never worth doing, and it clutters up your code.  To help you check whether your procedures exploit sparsity in the inputs, you can test your implementation with the tests in <tt><a href="http://resources.codingthematrix.com/mat_sparsity.py" title="Link: http://resources.codingthematrix.com/mat_sparsity.py">mat_sparsity.py</a></tt>.  To use this file, place it in your <code>matrix</code> directory with your completed <tt>mat.py</tt> and <tt>vec.py</tt> implementations and run a doctest: <code>python3 -m doctest mat_sparsity.py</code>.</li>
+  <li>When using <code>Mat</code>, like <code>Vec</code>, you should not be using named procedures such <code>add</code>.  Instead, use operators such as <code>[ ]</code> and <code>*</code>.</li>
+  <li>For each problem/task,
+   <ol>
+      <li>Test out your solution in the Python REPL;</li>
+      <li>Copy your solution into the stencil file <code>mat.py</code>;</li>
+      <li>Submit your solution by opening a console window, navigating using <code>cd</code> to the <code>matrix</code> folder, and entering the command <code>python3 coursera_submit mat.py</code>. The script will ask for your username and password.  They are located <a href="https://class.coursera.org/matrix-002/assignment/">on the assignments page</a>.</li>
+    </ol>
+  </li>
+</ol>
+<p>You can use the submit command to submit solutions for as many tasks as you like at one time.</p>
