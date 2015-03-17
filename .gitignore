@@ -1,7 +1,5 @@
 # vim turds
 .gitigore
-resources/
-docs/
 *.swp
 # Byte-compiled / optimized / DLL files
 __pycache__/
