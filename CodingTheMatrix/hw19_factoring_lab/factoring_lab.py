@@ -4,13 +4,7 @@ coursera = 1
 
 from vec import Vec
 from GF2 import one
-
-from factoring_support import dumb_factor
-from factoring_support import intsqrt
-from factoring_support import gcd
-from factoring_support import primes
-from factoring_support import prod
-
+from factoring_support import dumb_factor, intsqrt, gcd, primes, prod
 import echelon
 
 ## Task 1
@@ -29,7 +23,7 @@ def int2GF2(i):
         >>> int2GF2(100)
         0
     '''
-    pass
+    return 0 if i % 2 == 0 else one
 
 ## Task 2
 def make_Vec(primeset, factors):
@@ -45,7 +39,7 @@ def make_Vec(primeset, factors):
         >>> make_Vec({2,3,11}, [(2,3), (3,2)]) == Vec({2,3,11},{2:one})
         True
     '''
-    pass
+    return Vec(primeset, { i: int2GF2(j) for i, j in factors})
 
 ## Task 3
 def find_candidates(N, primeset):
@@ -83,7 +77,16 @@ def find_candidates(N, primeset):
                 Vec(D,{2: one, 3: one, 13: one})])
         True
     '''
-    pass
+    roots   = []
+    rowlist = []
+    x = intsqrt(N) + 2
+    while len(roots) <= len(primeset):
+       tmp = dumb_factor(x * x - N, primeset)
+       if tmp != []:
+          roots.append(x)
+          rowlist.append(make_Vec(primeset, tmp))
+       x = x + 1
+    return(roots, rowlist)
 
 
 
@@ -108,8 +111,11 @@ def find_a_and_b(v, roots, N):
         >>> find_a_and_b(v, roots, N)
         (4081, 1170)
     '''
-    pass
+    tmp = [roots[i] for i in v.D if v[i] != 0]
+    return (prod(tmp), intsqrt(prod(map(lambda x: x*x - N, tmp))))
+
 
 ## Task 5
 
-nontrivial_divisor_of_2461799993978700679 = ... 
+nontrivial_divisor_of_2461799993978700679 = 1999956839
+# 1230926561 1999956839
