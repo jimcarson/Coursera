@@ -14,3 +14,18 @@ def zero_vec(D):
     """Returns a zero vector with the given domain
     """
     return Vec(D, {})
+
+def vec2list(V):
+    """Given a Vec, return a list of field elements whose entry i is L[i]
+    >>> vec2list(Vec({0, 1, 2},{0: 10, 1: 20, 2: 30}))
+    [10, 20, 30]
+    """
+    return [V.f[i] for i in list(V.D)]
+
+def rvec2list(V,r):
+    """Given a Vec, return a list of field elements whose entry i is L[i]
+       but round the results to r digits.
+    >>> vec2list(Vec({0, 1, 2},{0: 10, 1: 20, 2: 30}))
+    [10, 20, 30]
+    """
+    return [round(V.f[i],r) for i in list(V.D)]
