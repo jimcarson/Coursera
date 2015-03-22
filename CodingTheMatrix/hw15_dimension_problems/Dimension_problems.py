@@ -44,7 +44,7 @@ exchange_2_S1 = [v0, w1, w2]
 exchange_2_S2 = [v0, v1, w2]
 exchange_2_S3 = [v0, v1, v2]
 
-## 3: (Problem 3) Morph Lemma Coding
+# 3: (Problem 3) Morph Lemma Coding
 #
 # There is a disconnect with this in the inputs are lists but the other routines you'd use
 # from last week's homework assume sets.
@@ -328,9 +328,9 @@ def find_triangular_matrix_inverse(A):
 #   print("ejecting ",w)
 #   print()
 
-S = [ Vec({0, 1, 2, 3, 4, 5, 6, 7},{1: one, 2: one, 3: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{1: one, 3: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 3: one, 5: one, 6: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{3: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{3: one, 5: one, 6: one}) ]
-B = [ Vec({0, 1, 2, 3, 4, 5, 6, 7},{2: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 2: one, 3: one, 4: one, 5: one, 6: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 2: one, 5: one, 6: one}) ]
-for (z,w) in morph(S,B):
-   print("injecting ",z)
-   print("ejecting ",w)
-   print()
+#S = [ Vec({0, 1, 2, 3, 4, 5, 6, 7},{1: one, 2: one, 3: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{1: one, 3: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 3: one, 5: one, 6: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{3: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{3: one, 5: one, 6: one}) ]
+#B = [ Vec({0, 1, 2, 3, 4, 5, 6, 7},{2: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 2: one, 3: one, 4: one, 5: one, 6: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 2: one, 5: one, 6: one}) ]
+#for (z,w) in morph(S,B):
+#   print("injecting ",z)
+#   print("ejecting ",w)
+#   print()
