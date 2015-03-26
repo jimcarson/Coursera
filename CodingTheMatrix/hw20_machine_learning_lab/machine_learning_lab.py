@@ -19,7 +19,11 @@ def signum(u):
         >>> signum(Vec({1,2,3},{1:2, 2:-1})) == Vec({1,2,3},{1:1,2:-1,3:1})
         True
     '''
-    pass
+#        >>> signum(Vec({1,2,3},{1:2, 2:-1})) 
+#        Vec({1,2,3},{1:1,2:-1,3:1})
+#        >>> signum(Vec({'A','B'}, {'A':3, 'B':-2}))
+#        Vec({’A’, ’B’},{’A’: 1, ’B’: -1})
+    return Vec( u.D, { i: 1 if u[i] >= 0 else -1 for i in u.D})
 
 ## Task 2 ##
 def fraction_wrong(A, b, w):
@@ -38,7 +42,8 @@ def fraction_wrong(A, b, w):
         >>> fraction_wrong(A, b, w)
         0.3333333333333333
     '''
-    pass
+    v = signum(A * w)
+    return 1.0 * len([x for x in b.D if b[x] != v[x]])/len(b.D)
 
 ## Task 3 ##
 def loss(A, b, w):
@@ -56,7 +61,9 @@ def loss(A, b, w):
         >>> loss(A, b, w)
         317
     '''
-    pass
+    v = (A * w)
+    return sum([(v[i] - b[i])**2 for i in b.D])
+    
 
 ## Task 4 ##
 def find_grad(A, b, w):
@@ -74,7 +81,7 @@ def find_grad(A, b, w):
         >>> find_grad(A, b, w) == Vec({'B', 'A'},{'B': -290, 'A': 60})
         True
     '''
-    pass
+    return 2 * (A * w - b) * A
 
 ## Task 5 ##
 def gradient_descent_step(A, b, w, sigma):
@@ -95,7 +102,7 @@ def gradient_descent_step(A, b, w, sigma):
         >>> gradient_descent_step(A, b, w, sigma) == Vec({'B', 'A'},{'B': 27.0, 'A': -5.0})
         True
     '''
-    pass
+    return (w - (sigma * find_grad(A , b, w)))
 
 ## Ungraded task ##
 def gradient_descent(A, b, w, sigma, T):
