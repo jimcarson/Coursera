@@ -1,3 +1,9 @@
+from orthogonalization import orthogonalize
+from math import sqrt
+from matutil import *
+from vec import Vec
+from vecutil import *
+
 # Copyright 2013 Philip N. Klein
 def orthonormalize(L):
     '''
@@ -23,7 +29,7 @@ def orthonormalize(L):
     --------------------------
     -0.653 0.528 -0.512 0.181
     '''
-    pass
+    return ( i / sqrt(i**2) for i in orthogonalize(L))
 
 
 def aug_orthonormalize(L):
@@ -66,4 +72,6 @@ def aug_orthonormalize(L):
     c  |  1 -5 -1
     d  |  2 -5  5
     '''
-    pass
+    Qlist = orthonormalize(L)
+    Rlist = list( mat2coldict ( coldict2mat(Qlist).transpose * coldict2mat(L) ).values() )
+    return Qlist,Rlist
