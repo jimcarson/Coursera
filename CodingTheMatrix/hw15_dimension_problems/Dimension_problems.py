@@ -8,9 +8,10 @@ from mat import Mat
 from matutil import listlist2mat, coldict2mat, mat2rowdict, mat2coldict
 from solver import solve
 from vec import Vec
+from The_Basis_problems import *
 from vecutil import list2vec
-from The_Basis_problems import exchange, vec2rep, is_superfluous
 from triangular import triangular_solve
+# from foomor import foomorph 
 
 
 ## 1: (Problem 1) Iterative Exchange Lemma
@@ -49,6 +50,7 @@ exchange_2_S3 = [v0, v1, v2]
 # There is a disconnect with this in the inputs are lists but the other routines you'd use
 # from last week's homework assume sets.
 #
+
 def morph(S, B):
     '''
     Input:
@@ -66,16 +68,34 @@ def morph(S, B):
         True
         >>> B == [list2vec(v) for v in [[1,1,0],[0,1,1],[1,0,1]]]
         True
+        >>> from vec import Vec
+        >>> from mat import Mat
+        >>> from GF2 import one
+        >>> from solver import solve
+        >>> M1 = Mat(({0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4}), {(1, 2): one, (3, 2): one, (0, 0): 0, (4, 3): one, (7, 1): 0, (3, 0): one, (7, 3): 0, (0, 4): 0, (6, 0): 0, (2, 1): 0, (6, 2): one, (2, 3): 0, (1, 4): 0, (5, 1): 0, (5, 4): one, (4, 2): 0, (1, 0): one, (0, 3): 0, (7, 2): 0, (4, 0): one, (0, 1): 0, (7, 4): 0, (2, 4): 0, (7, 0): 0, (3, 3): one, (5, 2): one, (6, 1): 0, (3, 1): one, (3, 4): one, (4, 4): 0, (1, 1): one, (6, 3): 0, (2, 0): one, (5, 0): 0, (2, 2): 0, (1, 3): 0, (6, 4): one, (5, 3): 0, (4, 1): 0, (0, 2): one})
+        >>> B = [Vec({0, 1, 2, 3, 4, 5, 6, 7},{2: one, 4: one})]
+        >>> ans = solve(M1,B[0])
+        >>> ans==Vec({0, 1, 2, 3, 4},{0: one, 1: one})
+        True
+        >>> M1 * ans == B[0]
+        True
+        >>> from GF2 import one
+        >>> B = [Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 3: one, 5: one, 19: one, 8: one, 9: one, 10: one, 12: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 2: one, 3: one, 4: one, 8: one, 9: one, 10: one, 11: one, 12: one, 13: one, 14: one, 16: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 5: one, 6: one, 7: one, 8: one, 11: one, 13: one, 14: one, 15: one, 16: one, 17: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 2: one, 5: one, 6: one, 7: one, 9: one, 10: one, 11: one, 12: one, 18: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 2: one, 19: one, 4: one, 6: one, 8: one, 9: one, 10: one, 13: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{1: one, 3: one, 4: one, 5: one, 9: one, 10: one, 11: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 1: one, 18: one, 3: one, 4: one, 5: one, 17: one, 7: one, 10: one, 12: one, 13: one})]
+        >>> S=[Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 1: one, 2: one, 19: one, 4: one, 5: one, 11: one, 13: one, 14: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 2: one, 8: one, 9: one, 10: one, 12: one, 13: one, 15: one, 17: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 17: one, 4: one, 6: one, 8: one, 9: one, 10: one, 12: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 17: one, 18: one, 7: one, 9: one, 11: one, 12: one, 13: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 2: one, 3: one, 5: one, 6: one, 7: one, 8: one, 10: one, 11: one, 12: one, 13: one, 17: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{19: one, 17: one, 3: one, 4: one, 6: one, 7: one, 8: one, 9: one, 10: one, 13: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 19: one, 2: one, 3: one, 5: one, 6: one, 8: one, 11: one, 13: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 3: one, 4: one, 5: one, 6: one, 17: one, 16: one, 19: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 4: one, 5: one, 7: one, 8: one, 11: one, 12: one, 13: one, 16: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{1: one, 2: one, 3: one, 4: one, 5: one, 6: one, 7: one, 9: one, 10: one, 12: one, 15: one, 17: one, 19: one})]
+        >>> ans2 = morph(S,B)
+        >>> ans[1] == (B[1],S[0])
+        True
+        B[1],S[0]
     '''
     eject_order = []
-    Sleft = S.copy() # What's left to eject that we haven't done already?
     Sprime = S.copy()
-    for i in range(len(B)):
-      Sprime.append(B[i]) # inject B
-      for j in S: # now scan through S and look for something to remove.
-         if j in Sleft and is_superfluous(Sprime, j):
-            eject_order.append((B[i],j))
-            Sleft.remove(j) # remove it from future consideration
+    Sleft = S.copy() # What's left to eject that we haven't done already?
+    for b in B:
+      Sprime.append(b) # inject B
+      for s in Sleft: # now scan through S and look for something to remove.
+         if is_superfluous(Sprime, s):
+            eject_order.append((b,s))
+            Sleft.remove(s) # remove it from future consideration
             break # next B[i]!
     return eject_order
 
@@ -321,12 +341,15 @@ def find_triangular_matrix_inverse(A):
 #    print("ejecting ",w)
 #    print()
 
-#B = [Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 3: one, 5: one, 19: one, 8: one, 9: one, 10: one, 12: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 2: one, 3: one, 4: one, 8: one, 9: one, 10: one, 11: one, 12: one, 13: one, 14: one, 16: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 5: one, 6: one, 7: one, 8: one, 11: one, 13: one, 14: one, 15: one, 16: one, 17: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 2: one, 5: one, 6: one, 7: one, 9: one, 10: one, 11: one, 12: one, 18: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 2: one, 19: one, 4: one, 6: one, 8: one, 9: one, 10: one, 13: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{1: one, 3: one, 4: one, 5: one, 9: one, 10: one, 11: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 1: one, 18: one, 3: one, 4: one, 5: one, 17: one, 7: one, 10: one, 12: one, 13: one})]
-#S=[Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 1: one, 2: one, 19: one, 4: one, 5: one, 11: one, 13: one, 14: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 2: one, 8: one, 9: one, 10: one, 12: one, 13: one, 15: one, 17: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 17: one, 4: one, 6: one, 8: one, 9: one, 10: one, 12: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 17: one, 18: one, 7: one, 9: one, 11: one, 12: one, 13: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 2: one, 3: one, 5: one, 6: one, 7: one, 8: one, 10: one, 11: one, 12: one, 13: one, 17: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{19: one, 17: one, 3: one, 4: one, 6: one, 7: one, 8: one, 9: one, 10: one, 13: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 19: one, 2: one, 3: one, 5: one, 6: one, 8: one, 11: one, 13: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 3: one, 4: one, 5: one, 6: one, 17: one, 16: one, 19: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 4: one, 5: one, 7: one, 8: one, 11: one, 12: one, 13: one, 16: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{1: one, 2: one, 3: one, 4: one, 5: one, 6: one, 7: one, 9: one, 10: one, 12: one, 15: one, 17: one, 19: one})]
-#for (z,w) in morph(S,B):
-#   print("injecting ",z)
-#   print("ejecting ",w)
-#   print()
+B = [Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 3: one, 5: one, 19: one, 8: one, 9: one, 10: one, 12: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 2: one, 3: one, 4: one, 8: one, 9: one, 10: one, 11: one, 12: one, 13: one, 14: one, 16: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 5: one, 6: one, 7: one, 8: one, 11: one, 13: one, 14: one, 15: one, 16: one, 17: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 2: one, 5: one, 6: one, 7: one, 9: one, 10: one, 11: one, 12: one, 18: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 2: one, 19: one, 4: one, 6: one, 8: one, 9: one, 10: one, 13: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{1: one, 3: one, 4: one, 5: one, 9: one, 10: one, 11: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 1: one, 18: one, 3: one, 4: one, 5: one, 17: one, 7: one, 10: one, 12: one, 13: one})]
+S=[Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 1: one, 2: one, 19: one, 4: one, 5: one, 11: one, 13: one, 14: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 2: one, 8: one, 9: one, 10: one, 12: one, 13: one, 15: one, 17: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 17: one, 4: one, 6: one, 8: one, 9: one, 10: one, 12: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{16: one, 17: one, 18: one, 7: one, 9: one, 11: one, 12: one, 13: one, 14: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 2: one, 3: one, 5: one, 6: one, 7: one, 8: one, 10: one, 11: one, 12: one, 13: one, 17: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{19: one, 17: one, 3: one, 4: one, 6: one, 7: one, 8: one, 9: one, 10: one, 13: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 19: one, 2: one, 3: one, 5: one, 6: one, 8: one, 11: one, 13: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 3: one, 4: one, 5: one, 6: one, 17: one, 16: one, 19: one, 15: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{0: one, 1: one, 4: one, 5: one, 7: one, 8: one, 11: one, 12: one, 13: one, 16: one, 18: one, 19: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},{1: one, 2: one, 3: one, 4: one, 5: one, 6: one, 7: one, 9: one, 10: one, 12: one, 15: one, 17: one, 19: one})]
+i = 0
+for (z,w) in morph(S,B):
+   for k in range(len(S)):
+      if S[k] == w:
+         print("injectiong ",i,"ejecting ",k)
+         break
+   i = i + 1
 
 #S = [ Vec({0, 1, 2, 3, 4, 5, 6, 7},{1: one, 2: one, 3: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{1: one, 3: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 3: one, 5: one, 6: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{3: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{3: one, 5: one, 6: one}) ]
 #B = [ Vec({0, 1, 2, 3, 4, 5, 6, 7},{2: one, 4: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 2: one, 3: one, 4: one, 5: one, 6: one}), Vec({0, 1, 2, 3, 4, 5, 6, 7},{0: one, 1: one, 2: one, 5: one, 6: one}) ]
