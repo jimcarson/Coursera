@@ -2,10 +2,10 @@
 coursera = 1
 # Please fill out this stencil and submit using the provided submission script.
 
+import echelon 
 from matutil import *
 from vecutil import *
 from GF2 import one
-from echelon import *
 
 
 
@@ -173,7 +173,7 @@ def echelon_solve(row_list, label_list, b):
     >>> echelon_solve(U_rows, [1, 0], [0, 0])
     Vec({0, 1},{})
     '''
-    tmp = Vec(set(label_list), {})
+    tmp = zero_vec(row_list[0].D)
     for i, row in enumerate(reversed(row_list)):
       t = b[len(b) - i - 1] + sum(row[j] * tmp[j] for j in label_list)
       if t == one:
@@ -187,31 +187,34 @@ def echelon_solve(row_list, label_list, b):
 
 def solve(A, b):
     M = echelon.transformation(A)
-    print("M=",A, "Mt", M)
     U = M*A
     col_label_list = sorted(A.D[1])
     U_rows_dict = mat2rowdict(U)
     row_list = [U_rows_dict[i] for i in sorted(U_rows_dict)]
     return echelon_solve(row_list,col_label_list, M*b)
 
+
 D = {'A','B','C','D'}
-A = Mat(({'a', 'b', 'c', 'd'}, {'A', 'B', 'C', 'D'}),
+A = Mat(({'A', 'B', 'C', 'D'}, {'A', 'B', 'C', 'D'}),
    {     
-         ('a', 'A'): one, ('a', 'B'): one, ('a', 'C'):   0, ('a', 'D'): one,
-         ('b', 'A'): one, ('b', 'B'):   0, ('b', 'C'):   0, ('b', 'D'): one,
-         ('c', 'A'): one, ('c', 'B'): one, ('c', 'C'): one, ('c', 'D'): one, 
-         ('d', 'A'):   0, ('d', 'B'):   0, ('d', 'C'): one, ('d', 'D'): one
+         ('A', 'A'): one, ('A', 'B'): one, ('A', 'C'):   0, ('A', 'D'): one,
+         ('B', 'A'): one, ('B', 'B'):   0, ('B', 'C'):   0, ('B', 'D'): one,
+         ('C', 'A'): one, ('C', 'B'): one, ('C', 'C'): one, ('C', 'D'): one, 
+         ('D', 'A'):   0, ('D', 'B'):   0, ('D', 'C'): one, ('D', 'D'): one
    }
 )
-r = Vec({'a', 'b', 'c', 'd'}, {'a': one, 'b':   0, 'c': one, 'd':   0})
-M = transformation(A)
-x = M * r
-U = M * A
-U_r = mat2rowdict(U)
+g = Vec({'A', 'B', 'C', 'D'}, {'A': one, 'B':   0, 'C': one, 'D':   0})
+# print(solve(A, g))
 
-row_list = [ U_r[i] for i in U_r ] # Provide as a list of Vec instances
-label_list = sorted(A.D[1])        # Provide as a list
-b = [ x[i] for i in x.D ]          # Provide as a list of GF(2) values
+## Problem 6
+label_list = ['A', 'B', 'C', 'D']
+row_list = [
+                Vec({'A', 'B', 'C', 'D'},{'A':one, 'B':one,          'D':one}),
+                Vec({'A', 'B', 'C', 'D'},{         'B':one                  }),
+                Vec({'A', 'B', 'C', 'D'},{                  'C':one         }),
+                Vec({'A', 'B', 'C', 'D'},{                           'D':one})
+           ]
+b          = [one, one, 0, 0]
 
 ## 7: (Problem 7) Nullspace A
 null_space_rows_a = { 3, 4} # Put the row numbers of M from the PDF
