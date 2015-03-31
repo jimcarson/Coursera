@@ -2,36 +2,97 @@
 coursera = 1
 # Please fill out this stencil and submit using the provided submission script.
 
+from QR import *
+from solver import *
+from dictutil import *
 from mat import Mat
+from math import sqrt
+from matutil import *
+from orthogonalization import *
+from triangular import *
 from vec import Vec
-from vecutil import list2vec
-from matutil import listlist2mat
+from vecutil import *
+from read_data import *
 
 
+
+# page 367
+
+def find_orthogonal_complement(U_basis, W_basis):
+    '''
+       Find orthogonal complement, from 9.6, page 367
+    Input:
+       - U basis for U, W basis for W
+    Output:
+       - orthogonal complment.  Vectors u*1..k have same span and are nonzero 
+         as u1..k is linearly independent.  n-k of the remaining vectors of 
+         w*1..n are nonzero and every one is orthogonal to u1..n, so they 
+         are orthogonal to every vector in U.  
+    >>> L = [list2vec(v) for v in [[8,-2,2], [0,3,3], [1,0,0], [0,1,0], [0,0,1]]]
+    >>> Lstar = orthogonalize(L)
+    >>> Lstar[2].is_almost_zero()
+    False
+    >>> Lstar[3].is_almost_zero()
+    True
+    >>> Lstar[4].is_almost_zero()
+    True
+    '''
+    k = len(U_basis)
+    n = len(W_basis)
+    v = [list2vec(i) for i in U_basis + W_basis]
+    w = orthogonalize(v)
+    return [w[i] for i in range(k, k+n) if not w[i].is_almost_zero()]
 
 ## 1: (Problem 1) Generators for orthogonal complement
-U_vecs_1 = [list2vec([0,0,3,2])]
-W_vecs_1 = [list2vec(v) for v in [[1,2,-3,-1],[1,2,0,1],[3,1,0,-1],[-1,-2,3,1]]]
+U_vecs_1 = [[0,0,3,2]]
+W_vecs_1 = [[1,2,-3,-1],[1,2,0,1],[3,1,0,-1],[-1,-2,3,1]]
 # Give a list of Vecs
-ortho_compl_generators_1 = ...
+ortho_compl_generators_1 = find_orthogonal_complement(U_vecs_1, W_vecs_1)
 
-U_vecs_2 = [list2vec([3,0,1])]
-W_vecs_2 = [list2vec(v) for v in [[1,0,0],[1,0,1]]]
-
-# Give a list of Vecs
-ortho_compl_generators_2 = ...
-
-U_vecs_3 = [list2vec(v) for v in [[-4,3,1,-2],[-2,2,3,-1]]]
-W_vecs_3 = [list2vec(v) for v in [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]]
+U_vecs_2 = [[3,0,1]]
+W_vecs_2 = [[1,0,0],[1,0,1]]
 
 # Give a list of Vecs
-ortho_compl_generators_3 = ...
+ortho_compl_generators_2 = find_orthogonal_complement(U_vecs_2, W_vecs_2)
 
+U_vecs_3 = [[-4,3,1,-2],[-2,2,3,-1]]
+W_vecs_3 = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
 
+# Give a list of Vecs
+ortho_compl_generators_3 = find_orthogonal_complement(U_vecs_3, W_vecs_3)
 
+#def find_null_space(A):
+#    '''
+#       Find null space basis
+#    Input:
+#       - A list of lists
+#    Output:
+#       - pair of v*1..n, r1..rn of lists of vectors such that v*1..n are mutually orthogonal vectors who spansorthogonal complment.  Vectors u*1..k have same span and are nonzero 
+#         as u1..k is linearly independent.  n-k of the remaining vectors of 
+#         w*1..n are nonzero and every one is orthogonal to u1..n, so they 
+#         are orthogonal to every vector in U.  
+#    >>> L = [list2vec(v) for v in [[8,-2,2], [0,3,3], [1,0,0], [0,1,0], [0,0,1]]]
+#    >>> Lstar = orthogonalize(L)
+#    >>> Lstar[2].is_almost_zero()
+#    False
+#    >>> Lstar[3].is_almost_zero()
+#    True
+#    >>> Lstar[4].is_almost_zero()
+#    True
+#    '''
+#    vstarlist, r_vecs = aug_orthogonalize(list2vec((A)))
+#    print("vstarlist=",vstarlist)
+#    print("r_vecs=",r_vecs)
+#    #T = coldict2mat(r_vecs)
+#    # find upper triangular matrix T such that A = matrix with columns vstarlist)
+#    #T = triangular_solve(r_vecs, vstarlist)
+#    print("t = ",T)
+#    #for i in T.transpose()
+#    return 0 # list of columns of T transpose corresponding to zero vecotrs
+#
 ## 2: (Problem 2) Basis for null space
-null_space_basis = ...
-
+A = listlist2mat([[-4,-1,-3,-2],[0,4,0,-1]])
+null_space_basis = [[5,1.4],[0,0.2]]
 
 
 ## 3: (Problem 3) Orthonormalize(L)
@@ -59,7 +120,7 @@ def orthonormalize(L):
     --------------------------
      0.528 -0.653 -0.512 0.181
     '''
-    pass
+    return [ i/sqrt(i*i) for i in orthogonalize(L)]
 
 
 
@@ -104,27 +165,17 @@ def aug_orthonormalize(L):
      c  |  1 -5 -1
      d  |  2 -5  5
     <BLANKLINE>
+
     '''
-    pass
-
-
-
-## 5: (Problem 5) QR factorization of small matrices
-#Compute the QR factorization
-
-#Please represent your solution as a list of rows, such as [[1,0,0],[0,1,0],[0,0,1]]
-
-part_1_Q = ...
-part_1_R = ...
-
-part_2_Q = ...
-part_2_R = ...
+    Qlist = orthonormalize(L)
+    Qm = coldict2mat(Qlist).transpose()
+    Rm = Qm * coldict2mat(L)
+    Rlist = list(mat2coldict(Rm).values())
+    return Qlist, Rlist
 
 
 
 ## 6: (Problem 6) QR Solve
-from matutil import mat2coldict, coldict2mat
-from python_lab import dict2list, list2dict
 
 def QR_factor(A):
     col_labels = sorted(A.D[1], key=repr)
@@ -134,6 +185,24 @@ def QR_factor(A):
     Q = coldict2mat(Qlist)
     R = coldict2mat(list2dict(Rlist, col_labels))
     return Q,R
+
+
+
+## 5: (Problem 5) QR factorization of small matrices
+#Compute the QR factorization
+
+#Please represent your solution as a list of rows, such as [[1,0,0],[0,1,0],[0,0,1]]
+
+
+QR5a = listlist2mat([[6,6],[2,0],[3,3]])
+QR5b = listlist2mat([[2,3],[2,1],[1,1]])
+Q, R = QR_factor(QR5a)
+part_1_Q = [[.857,.256],[.286,-.958],[.429,.128]]
+part_1_R = [[7, 6.43],[0,1.92]]
+
+Q, R = QR_factor(QR5b)
+part_2_Q = [[.667, .707],[.667, -.707],[.333,0]]
+part_2_R = [[3, 3], [0, 1.41]]
 
 
 def QR_solve(A, b):
@@ -151,12 +220,15 @@ def QR_solve(A, b):
         >>> A = Mat(domain,{('a','A'):-1, ('a','B'):2,('b','A'):5, ('b','B'):3,('c','A'):1,('c','B'):-2})
         >>> Q, R = QR_factor(A)
         >>> b = Vec(domain[0], {'a': 1, 'b': -1})
-        >>> x = QR_solve(A, b)
+        >>> x = solve(A, b)
         >>> result = A.transpose()*(b-A*x)
         >>> result.is_almost_zero()
         True
     '''
-    pass
+    Q, R = QR_factor(A)
+    Rlist = list( mat2rowdict(R).values())
+    bprime = Q.transpose() * b
+    return solve(Rlist, bprime) 
 
 
 
@@ -168,15 +240,15 @@ least_squares_Q1 = listlist2mat([[.8,-0.099],[.6, 0.132],[0,0.986]])
 least_squares_R1 = listlist2mat([[10,2],[0,6.08]])
 least_squares_b1 = list2vec([10, 8, 6])
 
-x_hat_1 = ...
-
+x_hat_1 =  triangular_solve_n(list(mat2rowdict(least_squares_R1).values()),least_squares_Q1.transpose()*least_squares_b1)
 
 least_squares_A2 = listlist2mat([[3, 1], [4, 1], [5, 1]])
 least_squares_Q2 = listlist2mat([[.424, .808],[.566, .115],[.707, -.577]])
 least_squares_R2 = listlist2mat([[7.07, 1.7],[0,.346]])
 least_squares_b2 = list2vec([10,13,15])
 
-x_hat_2 = ...
+x_hat_2 =  triangular_solve_n(list(mat2rowdict(least_squares_R2).values()),least_squares_Q2.transpose()*least_squares_b2)
+
 
 
 
@@ -185,14 +257,25 @@ x_hat_2 = ...
 
 #Please represent your solution as a list
 
-your_answer_1 = ...
-your_answer_2 = ...
+A8a = listlist2mat([[8,1],[6,2],[0,6]])
+b8a = list2vec([10,8,6])
+
+Q,R = QR_factor(A8a)
+your_answer_1 = [1.08, 0.984]
+
+A8b = listlist2mat([[3,1],[4,1]])
+b8b = list2vec([10,13])
+Q,R = QR_factor(A8b)
+your_answer_2 = [3,1]
 
 
 
 ## 9: (Problem 9) Linear regression example
 #Find a and b for the y=ax+b line of best fit
 
-a = ...
-b = ...
-
+A = read_vectors("age-height.txt")
+# Q, R = QR_factor(A)
+# age	height
+# { {18,76.1} {19,77} {20,78.1} {21,78.2} {22,78.8} {23,79.7} {24,79.9} {25,81.1} {26,81.2} {27,81.8} {28,82.8} {29,83.5} }
+a = 0.634965
+b = 64.9283

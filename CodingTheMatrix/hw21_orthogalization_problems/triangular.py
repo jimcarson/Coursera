@@ -1,0 +1,1 @@
+../resources/triangular.py
