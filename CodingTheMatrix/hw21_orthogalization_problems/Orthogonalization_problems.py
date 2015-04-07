@@ -61,39 +61,15 @@ W_vecs_3 = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
 # Give a list of Vecs
 ortho_compl_generators_3 = find_orthogonal_complement(U_vecs_3, W_vecs_3)
 
-#def find_null_space(A):
-#    '''
-#       Find null space basis
-#    Input:
-#       - A list of lists
-#    Output:
-#       - pair of v*1..n, r1..rn of lists of vectors such that v*1..n are mutually orthogonal vectors who spansorthogonal complment.  Vectors u*1..k have same span and are nonzero 
-#         as u1..k is linearly independent.  n-k of the remaining vectors of 
-#         w*1..n are nonzero and every one is orthogonal to u1..n, so they 
-#         are orthogonal to every vector in U.  
-#    >>> L = [list2vec(v) for v in [[8,-2,2], [0,3,3], [1,0,0], [0,1,0], [0,0,1]]]
-#    >>> Lstar = orthogonalize(L)
-#    >>> Lstar[2].is_almost_zero()
-#    False
-#    >>> Lstar[3].is_almost_zero()
-#    True
-#    >>> Lstar[4].is_almost_zero()
-#    True
-#    '''
-#    vstarlist, r_vecs = aug_orthogonalize(list2vec((A)))
-#    print("vstarlist=",vstarlist)
-#    print("r_vecs=",r_vecs)
-#    #T = coldict2mat(r_vecs)
-#    # find upper triangular matrix T such that A = matrix with columns vstarlist)
-#    #T = triangular_solve(r_vecs, vstarlist)
-#    print("t = ",T)
-#    #for i in T.transpose()
-#    return 0 # list of columns of T transpose corresponding to zero vecotrs
-#
 ## 2: (Problem 2) Basis for null space
+# Take augmented matrix, reduce to echelon form.
 A = listlist2mat([[-4,-1,-3,-2],[0,4,0,-1]])
-null_space_basis = [[5,1.4],[0,0.2]]
-
+Q = listlist2mat([[-1,0],[0,1]])
+R = listlist2mat([[4,1,3,2],[0,4,0,-1]])
+echelon_form = listlist2mat([[1,0,.75, 9./16],[0,1,0,-.25]])
+orthonormal_basis = list2vec([-0.4826895750, -0.0638853, 0.835242, -0.2555412])
+#null_space_basis = list2vec([-3,0,4,0]) #,[-9,4,0,16]]
+null_space_basis = [-0.4826895750, -0.0638853, 0.835242, -0.2555412]
 
 ## 3: (Problem 3) Orthonormalize(L)
 def orthonormalize(L):
@@ -205,6 +181,8 @@ part_2_Q = [[.667, .707],[.667, -.707],[.333,0]]
 part_2_R = [[3, 3], [0, 1.41]]
 
 
+import scipy
+import scipy.linalg
 def QR_solve(A, b):
     '''
     Input:
@@ -225,10 +203,13 @@ def QR_solve(A, b):
         >>> result.is_almost_zero()
         True
     '''
+    # Qp, Rp  = scipy.linalg.qr(scipy.array(A))
+    # Q = Qp.tolist()
+    # R = Rp.tolist()
     Q, R = QR_factor(A)
     Rlist = list( mat2rowdict(R).values())
     bprime = Q.transpose() * b
-    return solve(Rlist, bprime) 
+    return triangular_solve_n(Rlist,bprime)
 
 
 
@@ -247,6 +228,7 @@ least_squares_Q2 = listlist2mat([[.424, .808],[.566, .115],[.707, -.577]])
 least_squares_R2 = listlist2mat([[7.07, 1.7],[0,.346]])
 least_squares_b2 = list2vec([10,13,15])
 
+# x_hat_2 = QR_solve(least_squares_A2, least_squares_b2)
 x_hat_2 =  triangular_solve_n(list(mat2rowdict(least_squares_R2).values()),least_squares_Q2.transpose()*least_squares_b2)
 
 
@@ -279,3 +261,4 @@ A = read_vectors("age-height.txt")
 # { {18,76.1} {19,77} {20,78.1} {21,78.2} {22,78.8} {23,79.7} {24,79.9} {25,81.1} {26,81.2} {27,81.8} {28,82.8} {29,83.5} }
 a = 0.634965
 b = 64.9283
+
